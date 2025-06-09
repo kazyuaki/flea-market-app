@@ -84,6 +84,6 @@ class UserController extends Controller
         $user->is_profile_set = true;
         $user->save();
 
-        return redirect('/mypage/profile')->with('status', 'プロフィールを更新しました！');
+        return redirect('/mypage')->with('status', 'プロフィールを更新しました！');
     }
 }

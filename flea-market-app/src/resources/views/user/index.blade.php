@@ -9,7 +9,7 @@
     <div class="mypage__content">
         <div class="mypage__profile">
             <div class="user">
-                <img class="user__avatar" src="{{ asset('storage/' . $user->img) }}" alt="ユーザー写真">
+                <img class="user__avatar" src="{{ asset('storage/' . $user->profile_image) }}" alt="ユーザー写真">
                 <h2>ユーザー名</h2>
             </div>
             <div class="profile__button">
@@ -30,13 +30,13 @@
                 <div class="item-name">{{ $item->name }}</div>
             </div>
             @empty
-                @if ($activeTab === 'buy')
-                <p>購入した商品はまだありません。</p>
-                @elseif ($activeTab === 'sell')
-                <p>出品した商品はまだありません。</p>
-                @else
-                <p>表示する商品がありません。</p>
-                @endif
+            @if ($activeTab === 'buy')
+            <p>購入した商品はまだありません。</p>
+            @elseif ($activeTab === 'sell')
+            <p>出品した商品はまだありません。</p>
+            @else
+            <p>表示する商品がありません。</p>
+            @endif
             @endforelse
         </div>
     </div>

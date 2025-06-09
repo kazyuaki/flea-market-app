@@ -3,27 +3,32 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\ExhibitionRequest;
 use App\Models\Category;
 use App\Models\Item;
 use App\Models\User;
 
+
 class ItemController extends Controller
 {
 
     public function index(Request $request)
     {
-        if ($request->query('tab') === 'sell') {
-            // 自分が出品した商品だけ
-            $items = Item::where('user_id', auth()->id())->latest()->get();
-            $activeTab = 'sell';
-        } else {
-            // お気に入りに登録した商品だけ
+        $tab = $request->query('tab');
+
+        if ($tab === 'mylist') {
+            if (!auth()->check()) {
+                return redirect()->route('login');
+            }
+
             $items = auth()->user()->favorites()->latest()->get();
+            $activeTab = 'mylist';
+        } else {
+            $items = Item::where('user_id', 1)->latest()->get();
             $activeTab = 'recommend';
         }
-
         return view('items.index', compact('items', 'activeTab'));
     }
 

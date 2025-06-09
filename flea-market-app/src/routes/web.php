@@ -16,7 +16,7 @@ use Illuminate\Auth\Events\Verified;
 */
 
 # トップページ（商品一覧）
-Route::get('/', [ItemController::class, 'index'])->name('home');
+Route::get('/', [ItemController::class, 'index'])->name('items.index');
 
 # ゲスト専用（会員登録／ログイン）
 Route::middleware('guest')->group(function () {

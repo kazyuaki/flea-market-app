@@ -11,7 +11,7 @@
             <h2>プロフィール設定</h2>
         </div>
 
-        <form action="{{ route('profile.edit') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="form-group">
@@ -33,7 +33,7 @@
             </div>
             <div class="form-group">
                 <label class="form-group__label" for="post_code">郵便番号</label>
-                <input class="form-group__input" type="text" id="post_code" name="post_code" value="{{ old('name', $user->post_code) }}">
+                <input class="form-group__input" type="text" id="post_code" name="post_code" value="{{ old('post_code', $user->post_code) }}">
                 @error('zipcode')
                 <div class="form-group__error">{{ $message }}</div>
                 @enderror

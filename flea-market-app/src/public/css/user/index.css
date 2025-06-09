@@ -45,6 +45,10 @@
     cursor: pointer;
 }
 
+.profile__button-submit a{
+    text-decoration: none;
+}
+
 .nav {
     display: block;
     border-bottom: 1px solid #ddd;
