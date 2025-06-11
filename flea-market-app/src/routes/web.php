@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
@@ -18,6 +19,8 @@ use Illuminate\Auth\Events\Verified;
 # トップページ（商品一覧）
 Route::get('/', [ItemController::class, 'index'])->name('items.index');
 
+Route::get('/item/{item}', [ItemController::class, 'show'])->name('item.show');
+
 # ゲスト専用（会員登録／ログイン）
 Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register.form');
@@ -25,6 +28,8 @@ Route::middleware('guest')->group(function () {
 
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login']);
+
+    Route::post('/item/{item_id}/comment',[CommentController::class,'store'])->name('comment.store');
 });
 
 # 認証ユーザー専用
@@ -35,7 +40,7 @@ Route::middleware('auth')->group(function () {
     //初回プロフィール設定・保存
     Route::get('/mypage/profile/setup', [UserController::class, 'setup'])->name('profile.setup');
     Route::post('/mypage/profile/setup', [UserController::class, 'storeProfile'])->name('profile.store');
-    //
+    //２回目以降プロフィール編集・更新
     Route::get('/mypage/profile', [UserController::class, 'edit'])->name('profile.edit');
     Route::post('/mypage/profile', [UserController::class, 'update'])->name('profile.update');
     // 出品関連

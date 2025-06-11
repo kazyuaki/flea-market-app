@@ -13,7 +13,7 @@ use App\Models\User;
 
 class ItemController extends Controller
 {
-
+    //商品一覧
     public function index(Request $request)
     {
         $tab = $request->query('tab');
@@ -32,6 +32,13 @@ class ItemController extends Controller
         return view('items.index', compact('items', 'activeTab'));
     }
 
+    public function show(Item $item)
+    {
+        $item->load(['categories', 'comments.user']);
+        return view('items.show', compact('item'));
+    }
+
+    //
     public function create()
     {
 
@@ -39,7 +46,7 @@ class ItemController extends Controller
 
         return view('items.create', compact('categories'));
     }
-
+    //出品商品の情報を保存
     public function store(ExhibitionRequest $request)
     {
         $item = Item::create([

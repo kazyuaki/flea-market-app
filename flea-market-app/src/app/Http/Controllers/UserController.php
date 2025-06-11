@@ -10,7 +10,7 @@ use App\Http\Requests\ProfileRequest;
 
 class UserController extends Controller
 {
-    //プロフィール未設定の場合　初期設定画面にリダイレクト
+    //プロフィール未設定の場合　初期設定画面にリダイレクト　設定済の場合、トップページもしくは、直前の挙動ページへ
     public function setup()
     {
         $user = Auth::user();
@@ -21,7 +21,7 @@ class UserController extends Controller
 
         return view('user.setup', compact('user'));
     }
-
+    //初回プロフィール設定を保存する
     public function storeProfile(ProfileRequest $request)
     {
         $user = Auth::user();
@@ -84,6 +84,6 @@ class UserController extends Controller
         $user->is_profile_set = true;
         $user->save();
 
-        return redirect('/mypage')->with('status', 'プロフィールを更新しました！');
+        return redirect('/')->with('status', 'プロフィールを更新しました！');
     }
 }

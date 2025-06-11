@@ -10,7 +10,7 @@
         <div class="mypage__profile">
             <div class="user">
                 <img class="user__avatar" src="{{ asset('storage/' . $user->profile_image) }}" alt="ユーザー写真">
-                <h2>ユーザー名</h2>
+                <h2>{{ $user->name }}</h2>
             </div>
             <div class="profile__button">
                 <a href="{{ route('profile.edit') }}" class="profile__button-submit">プロフィールを編集</a>

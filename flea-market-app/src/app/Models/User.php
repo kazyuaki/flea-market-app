@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -38,15 +38,14 @@ class User extends Authenticatable
         return $this->hasMany(Item::class);
     }
 
-    public function purchasedItems() 
+    public function purchasedItems()
     {
-        return $this->belongsToMany(Item::class, 'orders', 'user_id' , 'item_id')
-                    ->withTimestamps();
+        return $this->belongsToMany(Item::class, 'orders', 'user_id', 'item_id')
+            ->withTimestamps();
     }
 
     public function favorites()
     {
         return $this->belongsToMany(Item::class, 'favorites')->withTimestamps();
     }
-
 }
