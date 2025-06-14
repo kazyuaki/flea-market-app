@@ -26,14 +26,20 @@
         <div class="item-list">
             @forelse($items as $item)
             <div class="item">
-                <img src="{{ asset('storage/' . $item->img) }}" alt="商品画像">
-                <div class="item-name">{{ $item->name }}</div>
+                <a href="{{ route('item.show', ['item' => $item->id]) }}">
+                    @if (Str::startsWith($item->img, 'http'))
+                    <img src="{{ $item->img }}" alt="商品画像">
+                    @else
+                    <img src="{{ asset('storage/' . $item->img) }}" alt="商品画像">
+                    @endif
+                    <div class="item-name">{{ $item->name }}</div>
+                </a>
             </div>
             @empty
             @if ($activeTab === 'buy')
             <p>購入した商品はまだありません。</p>
             @elseif ($activeTab === 'sell')
-            <p>出品した商品はまだありません。</p>
+            <p>「いいね」した商品はまだありません。</p>
             @else
             <p>表示する商品がありません。</p>
             @endif

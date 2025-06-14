@@ -44,8 +44,14 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    //「このユーザーがいいねした」商品一覧を取得するためのリレーション
     public function favorites()
     {
         return $this->belongsToMany(Item::class, 'favorites')->withTimestamps();
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }

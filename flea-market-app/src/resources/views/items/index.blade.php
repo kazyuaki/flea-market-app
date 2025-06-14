@@ -27,7 +27,7 @@
          @if($activeTab === 'recommend')
          お気に入りにした登録はありません。
          @else
-         出品した商品はありません。
+         「いいね」した商品はありません。
          @endif
      </p>
      @endforelse

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
@@ -28,8 +29,6 @@ Route::middleware('guest')->group(function () {
 
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login']);
-
-    Route::post('/item/{item_id}/comment',[CommentController::class,'store'])->name('comment.store');
 });
 
 # 認証ユーザー専用
@@ -46,4 +45,6 @@ Route::middleware('auth')->group(function () {
     // 出品関連
     Route::get('/sell', [ItemController::class, 'create'])->name('item.create');
     Route::post('/sell', [ItemController::class, 'store'])->name('item.store');
+    Route::post('/item/{item}/favorite', [FavoriteController::class, 'toggle'])->name('items.favorite');
+    Route::post('/item/{item_id}/comment', [CommentController::class, 'store'])->name('comment.store');
 });

@@ -43,35 +43,40 @@ body {
 
 .item-brand {
     font-size: 25px;
-    color: #555;
     margin:0;
 }
 
 .item-price {
     display: flex;
     font-size: 45px;
-    font-weight: bold;
-    color: #e53935;
+    color: #000000;
     align-items: center;
 }
 
 .tax {
     font-size: 35px;
-    color: #888;
 }
 
 .item-reactions {
     display: flex;
-    gap: 20px;
+    justify-content: flex-start;
+    gap: 40px;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.reaction-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
 }
 
 .reaction-favorite,
 .reaction-comment {
-    font-size: 55px;
-    padding-top: 0;
-    padding-left: 30px;
+    font-size: 32px;
     background: none;
-    /* color: white; */
     border: none;
     cursor: pointer;
 }
@@ -206,4 +211,9 @@ body {
 
 .comment-form__button:hover {
     background-color: #e04848;
+}
+
+.form-error {
+    color: red;
+    font-size: 20px;
 }

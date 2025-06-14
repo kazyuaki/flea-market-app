@@ -18,12 +18,26 @@
                 <h2 class="item-title">{{ $item->name }}</h2>
                 <p class="item-brand">{{ $item->brand }}</p>
                 <div class="item-price">
-                    <p>{{ number_format($item->price) }}</p>
+                    <p>¥{{ number_format($item->price) }}</p>
                     <p class="tax">（税込）</p>
                 </div>
                 <div class="item-reactions">
-                    <button class="reaction-favorite">☆</button>
-                    <button class="reaction-comment">💬</button>
+                    <div class="reaction-group">
+                        <form action="{{ route('items.favorite', $item->id) }}" method="POST">
+                            @csrf
+                            <button class="reaction-favorite" type="submit">
+                                <img src="{{ Auth::check() && $item->isFavoritedBy(Auth::user()) ? asset('img/red-star.png') : asset('img/star.png') }}"
+                                    alt="いいね" width="50">
+                            </button>
+                        </form>
+                        <p class="reaction-favorite__number">{{ $item->favoritedBy->count() ?? 0 }}</p>
+                    </div>
+                    <div class="reaction-group">
+                        <button class="reaction-comment">
+                            <img src="../../img/speech-bubble.png" alt="いいね" width="50">
+                        </button>
+                        <p class="reaction-comment__number">{{ $item->comments->count() ?? 0 }}</p>
+                    </div>
                 </div>
 
                 <div class="item-purchase__button">
@@ -64,17 +78,24 @@
                 <p class="comment__text">{{ $comment->content }}</p>
                 @endforeach
 
-                @auth
+                @if(Auth::check())
                 <form class="comment-form" action="{{ route('comment.store', ['item_id' => $item->id]) }}" method="POST">
                     @csrf
                     <label for="comment">商品へのコメント</label>
-                    <textarea id="comment" name="body" rows="5">{{ old('body') }}</textarea>
+                    <textarea id="comment" name="content" rows="5">{{ old('body') }}</textarea>
                     @error('body')
                     <p class="form-error">{{ $message }}</p>
                     @enderror
                     <button type="submit" class="comment-form__button">コメントを送信する</button>
                 </form>
-                @endauth
+                @else
+                <p>
+                <p><a href="{{ route('login') }}">ログイン</a>するとコメントできます</p>
+                </p>
+                @endif
+                @error('content')
+                    <p class="form-error">{{ $message }}</p>
+                @enderror
             </section>
         </div>
     </div>

@@ -22,10 +22,27 @@ class Item extends Model
     public function categories() {
         return $this->belongsToMany(Category::class);
     }
+    //これは「この商品をいいねしているユーザー一覧」を取るためのリレーション。
+    public function favorites() {
+        return $this->belongsToMany(User::class, 'favorites', 'item_id', 'user_id')->withTimestamps();
+    }
+
+    public function favoritedBy()
+    {
+        return $this->belongsToMany(User::class, 'favorites')->withTimestamps();
+    }
+
+    public function isFavoritedBy(User $user)
+    {
+        if(!$user) return false;
+        return $this->favoritedBy->contains($user);
+    }
 
     public function comments() {
         return $this->hasMany(Comment::class);
     }
+
+    
 
     public function getConditionLabelAttribute()
     {

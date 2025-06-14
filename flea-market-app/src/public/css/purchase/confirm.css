@@ -1,0 +1,99 @@
+.item-confirm {
+    display: flex;
+    flex-direction: column;
+    max-width: 1000px;
+    margin: 40px auto;
+    gap: 40px;
+    padding: 0 20px;
+}
+
+/* 左エリア：商品情報・支払い・住所 */
+.item-detail,
+.payment-method,
+.shipping-address {
+    margin-bottom: 30px;
+}
+
+.item-detail {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.item-detail__image img {
+    width: 120px;
+    height: 120px;
+    background-color: #ddd;
+    object-fit: cover;
+}
+
+.item-title {
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.item-price {
+    font-size: 18px;
+    color: #444;
+}
+
+.tax {
+    font-size: 12px;
+    color: #999;
+}
+
+.payment-method__title h3,
+.shipping-address__title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.payment-method select {
+    padding: 8px;
+    font-size: 14px;
+}
+
+.shipping-address__content {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 4px;
+    line-height: 1.5;
+}
+
+/* 右側：購入ボックス */
+.item-purchase__button-box {
+    width: 300px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 6px;
+    background: #fff;
+}
+
+.item-purchace__confirm {
+    width: 100%;
+    margin-bottom: 20px;
+    font-size: 14px;
+    border-collapse: collapse;
+}
+
+.item-purchace__confirm th,
+.item-purchace__confirm td {
+    text-align: left;
+    padding: 6px 0;
+}
+
+.item-purchase__button button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.item-purchase__button button:hover {
+    background-color: #c0392b;
+}
