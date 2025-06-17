@@ -74,7 +74,12 @@ class UserController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        $user->fill($request->only(['name']));
+        $user->fill($request->only([
+            'name',
+            'post_code',
+            'address',
+            'building_name',
+        ]));
 
         if ($request->hasFile('profile_image')) {
             $path = $request->file('profile_image')->store('profiles', 'public');

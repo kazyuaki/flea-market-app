@@ -32,9 +32,9 @@
                 @enderror
             </div>
             <div class="form-group">
-                <label class="form-group__label" for="zipcode">郵便番号</label>
-                <input class="form-group__input" type="text" id="zipcode" name="zipcode" value="{{ old('zipcode') }}">
-                @error('zipcode')
+                <label class="form-group__label" for="post_code">郵便番号</label>
+                <input class="form-group__input" type="text" id="post_code" name="post_code" value="{{ old('post_code') }}">
+                @error('post_code')
                 <div class="form-group__error">{{ $message }}</div>
                 @enderror
             </div>

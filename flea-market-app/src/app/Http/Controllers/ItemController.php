@@ -23,6 +23,7 @@ class ItemController extends Controller
                 return redirect()->route('login');
             }
 
+            
             $items = auth()->user()->favorites()->latest()->get();
             $activeTab = 'mylist';
         } else {
@@ -37,7 +38,7 @@ class ItemController extends Controller
         // 自分で$item を取得する場合 今回のルーティングでは使えない（モデル取得済みのため）
         //$item = Item::with(['categories', 'favorites', 'comments.user'])->findOrFail($id);
 
-        //ルートで　$item を受け取っている場合（暗黙の結合）
+        //ルートでa$item を受け取っている場合（暗黙の結合）
         $item->load(['categories', 'favorites' ,'comments.user']);
         return view('items.show', compact('item'));
     }

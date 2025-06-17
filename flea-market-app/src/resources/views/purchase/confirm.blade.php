@@ -1,0 +1,68 @@
+@extends('layouts.app')
+
+@section('css')
+<link rel="stylesheet" href="{{ asset('css/purchase/confirm.css' )}}">
+@endsection
+
+@section('content')
+<main>
+    <div class="content">
+        <div class="item-confirm">
+            <section class="item-detail">
+                <div class="item-detail__image">
+                    <img src="{{Str::startsWith($item->img,'http') ? $item->img : asset('storage/' . $item->img) }}"  alt=" 商品画像">
+                </div>
+                <div class="item-detail__info">
+                    <h2 class="item-title">{{ $item->name }}</h2>
+                    <div class="item-price">
+                        <p>¥{{ number_format($item->price) }}</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="payment-method">
+                <div class="payment-method__title">
+                    <h3>支払い方法</h3>
+                </div>
+                <div class="payment-method__select">
+                    <select name="" id="">
+                        <option value="" default>選択してください</option>
+                        <option value="store">コンビニ払い</option>
+                        <option value="card">カード払い</option>
+                    </select>
+                </div>
+            </section>
+
+            <section class="shipping-address">
+                <div class="shipping-address__title--box">
+                    <h3 class="shipping-address__title">配送先</h3>
+                    <div class="shipping-address__change">
+                        <a href="{{ route('purchase.address.edit',['item' => $item->id]) }}">変更する</a>
+                    </div>
+                </div>
+                <div class="shipping-address__content">
+                    <p class="post_code">〒XXXーYYYY</p>
+                    <p class="address">ここには住所と建物が入ります</p>
+                </div>
+            </section>
+        </div>
+        <div class="item-purchase__box">
+            <div class="item-purchase__confirm">
+                <table>
+                    <tr>
+                        <th class="table-title">商品代金</th>
+                        <td class="table-price">¥47,000</td>
+                    </tr>
+                    <tr>
+                        <th class="table-title">支払い方法</th>
+                        <td class="table-price">コンビニ払い</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="item-purchase__button">
+                <button>購入する</button>
+            </div>
+        </div>
+    </div>
+</main>
+@endsection

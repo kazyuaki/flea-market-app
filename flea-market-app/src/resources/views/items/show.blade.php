@@ -1,4 +1,4 @@
-@extends('layouts/app')
+@extends('layouts.app')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/items/show.css' )}}">
@@ -39,10 +39,12 @@
                         <p class="reaction-comment__number">{{ $item->comments->count() ?? 0 }}</p>
                     </div>
                 </div>
-
-                <div class="item-purchase__button">
-                    <button>購入手続きへ</button>
-                </div>
+                <form action="{{ route('purchase.confirm', ['item' => $item->id]) }}" method="POST">
+                    @csrf
+                    <div class="item-purchase__button">
+                        <button>購入手続きへ</button>
+                    </div>
+                </form>
             </section>
 
             <section class="item-info">
@@ -94,7 +96,7 @@
                 </p>
                 @endif
                 @error('content')
-                    <p class="form-error">{{ $message }}</p>
+                <p class="form-error">{{ $message }}</p>
                 @enderror
             </section>
         </div>
