@@ -10,7 +10,7 @@
         <div class="item-confirm">
             <section class="item-detail">
                 <div class="item-detail__image">
-                    <img src="{{Str::startsWith($item->img,'http') ? $item->img : asset('storage/' . $item->img) }}"  alt=" 商品画像">
+                    <img src="{{Str::startsWith($item->img,'http') ? $item->img : asset('storage/' . $item->img) }}" alt=" 商品画像">
                 </div>
                 <div class="item-detail__info">
                     <h2 class="item-title">{{ $item->name }}</h2>
@@ -25,11 +25,14 @@
                     <h3>支払い方法</h3>
                 </div>
                 <div class="payment-method__select">
-                    <select name="" id="">
-                        <option value="" default>選択してください</option>
-                        <option value="store">コンビニ払い</option>
-                        <option value="card">カード払い</option>
-                    </select>
+                    <form action="{{ route('purchase.confirm.store', [ 'item' => $item->id ]) }}" method="POST">
+                        @csrf
+                        <select name="payment_method" onchange="this.form.submit()">
+                            <option value="">選択してください</option>
+                            <option value="コンビニ払い" {{ session('payment_method') == 'コンビニ払い' ? 'selected' : '' }}>コンビニ払い</option>
+                            <option value="カード払い" {{ session('payment_method') == 'カード払い' ? 'selected' : '' }}>カード払い</option>
+                        </select>
+                    </form>
                 </div>
             </section>
 
@@ -41,8 +44,8 @@
                     </div>
                 </div>
                 <div class="shipping-address__content">
-                    <p class="post_code">〒XXXーYYYY</p>
-                    <p class="address">ここには住所と建物が入ります</p>
+                    <p class="post_code">〒{{ $user->post_code }}</p>
+                    <p class="address">{{ $user->address }} {{ $user->building_name }}</p>
                 </div>
             </section>
         </div>
@@ -51,18 +54,20 @@
                 <table>
                     <tr>
                         <th class="table-title">商品代金</th>
-                        <td class="table-price">¥47,000</td>
+                        <td class="table-price">¥{{ number_format($item->price) }}</td>
                     </tr>
                     <tr>
                         <th class="table-title">支払い方法</th>
-                        <td class="table-price">コンビニ払い</td>
+                        <td class="table-price">{{ $payment_method ?? '未選択' }}</td>
                     </tr>
                 </table>
             </div>
-            <div class="item-purchase__button">
-                <button>購入する</button>
-            </div>
+            <form action="{{ route('purchase.complete', ['item' => $item->id]) }}" method="POST">
+                @csrf
+                <div class="item-purchase__button">
+                    <button>購入する</button>
+                </div>
+            </form>
         </div>
     </div>
-</main>
-@endsection
+    @endsection

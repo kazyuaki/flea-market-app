@@ -23,7 +23,7 @@ Route::get('/', [ItemController::class, 'index'])->name('items.index');
 
 Route::get('/item/{item}', [ItemController::class, 'show'])->name('item.show');
 
-Route::post('/purchase/confirm/{item}', [PurchaseController::class, 'confirm'])->name('purchase.confirm');
+
 
 # ゲスト専用（会員登録／ログイン）
 Route::middleware('guest')->group(function () {
@@ -57,4 +57,10 @@ Route::middleware('auth')->group(function () {
     //いいね・コメント送信
     Route::post('/item/{item}/favorite', [FavoriteController::class, 'toggle'])->name('items.favorite');
     Route::post('/item/{item_id}/comment', [CommentController::class, 'store'])->name('comment.store');
+
+    //購入手続き画面
+    Route::get('/purchase/confirm/{item}', [PurchaseController::class, 'confirm'])->name('purchase.confirm');
+    Route::post('/purchase/confirm/{item}', [PurchaseController::class, 'confirm'])->name('purchase.confirm.store');
+    //購入決定
+    Route::post('/purchase/complete/{item}', [PurchaseController::class, 'complete'])->name('purchase.complete');
 });

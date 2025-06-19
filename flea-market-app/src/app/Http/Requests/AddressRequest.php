@@ -24,17 +24,17 @@ class AddressRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required'],
+        
             'post_code' => ['required', 'regex:/^\d{3}-\d{4}$/'],
-            'address' => ['required'],
-            'building_name' => ['required'],
+            'address' => ['required','string'],
+            'building_name' => ['required', 'string'],
         ];
     }
 
     public function messages()
     {
         return[
-            'name.required' => '名前を入力してください',
+      
             'post_code.required' => '郵便番号を入力してください',
             'post_code.regex' => '郵便番号は 123-4567 の形式で入力してください',
             'address.required' => '住所を入力してください',

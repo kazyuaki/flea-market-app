@@ -24,6 +24,7 @@ class UserController extends Controller
     //初回プロフィール設定を保存する
     public function storeProfile(ProfileRequest $request)
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         $user->name = $request->name;
@@ -45,6 +46,7 @@ class UserController extends Controller
     // プロフィール画面（閲覧用） /mypage/index
     public function index(Request $request)
     {
+        /** @var \App\Models\User $user */
         $user = auth()->user();
         $tab = $request->query('tab');
 

@@ -10,7 +10,7 @@
         <div class="address-edit__title">
             <h2>住所の変更</h2>
         </div>
-        <!-- <form class="address-edit__form" action="{{ route('purchase.address.update', $item) }}" method="POST">
+        <form class="address-edit__form" action="{{ route('purchase.address.update', ['item' => $item->id]) }}" method="POST">
             @csrf
             <div class="form-group">
                 <label class="form-group__label" for="post_code">郵便番号</label>
@@ -34,10 +34,6 @@
                 @enderror
             </div>
             <button class="update__button" type="submit">更新する</button>
-        </form> -->
-        <form action="{{ route('purchase.address.update', $item) }}" method="POST">
-            @csrf
-            <button type="submit">送信テスト</button>
         </form>
     </div>
 </main>
