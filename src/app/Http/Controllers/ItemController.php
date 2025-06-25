@@ -1,0 +1,88 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+// use Illuminate\Support\Str;
+// use App\Http\Requests\StoreItemRequest;
+use App\Http\Requests\ExhibitionRequest;
+use App\Models\Category;
+use App\Models\Item;
+// use App\Models\Order;
+
+
+class ItemController extends Controller
+{
+    //商品一覧
+    public function index(Request $request)
+    {
+        /** @var \App\Models\User $user */
+        $user = auth()->user();
+
+        $tab = $request->query('tab');
+        $keyword = $request->query('keyword');
+
+        if ($tab === 'mylist') {
+            if (!auth()->check()) {
+                $items = collect();
+            } else {
+                $items = $user->favorites()->when($keyword, function ($query, $keyword) {
+                    $query->where('name', 'like', '%' . $keyword . '%');
+                })->latest()->get();
+            }
+            $activeTab = 'mylist';
+        } else {
+            $items = Item::when($keyword, function ($query, $keyword) {
+                $query->where('name', 'like', '%' . $keyword . '%');
+            })->where('user_id', 1) // ダミーユーザーだけ表示
+                ->latest()
+                ->get();
+            $activeTab = 'recommend';
+        }
+
+        //購入したitem_id一覧
+        $purchasedItemIds = auth()->check()
+            ? $user->orders()->pluck('item_id')->toArray()
+            : [];
+
+        return view('items.index', compact('items', 'activeTab', 'purchasedItemIds'));
+    }
+
+    //商品詳細画面の表示
+    public function show(Item $item)
+    {
+        // 自分で$item を取得する場合 今回のルーティングでは使えない（モデル取得済みのため）
+        //$item = Item::with(['categories', 'favorites', 'comments.user'])->findOrFail($id);
+
+        //ルートで$item を受け取っている場合（暗黙の結合）
+        $item->load(['categories', 'favorites', 'comments.user']);
+        return view('items.show', compact('item'));
+    }
+
+    //商品出品画面の表示
+    public function create()
+    {
+        $categories = Category::all();
+
+        return view('items.create', compact('categories'));
+    }
+    //出品商品の情報を保存
+    public function store(ExhibitionRequest $request)
+    {
+        $item = Item::create([
+            'user_id' => auth()->id(),
+            'name' => $request->name,
+            'brand' => $request->brand,
+            'price' => $request->price,
+            'detail' => $request->detail,
+            'condition' => $request->condition,
+            'img' => $request->hasFile('img')
+                ? $request->file('img')->store('items', 'public')
+                : null,
+        ]);
+        // カテゴリーの中間テーブルへ登録
+        $item->categories()->sync($request->categories);
+
+        return redirect('/')->with('status', '商品を出品しました！');
+    }
+}
