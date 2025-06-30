@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\Item;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -13,10 +15,27 @@ class FavoriteTest extends TestCase
      *
      * @return void
      */
-    public function test_example()
+    public function testUserCanFavoriteAndUnfavoriteItem()
     {
-        $response = $this->get('/');
+        /** @var \App\Models\User $user */
 
-        $response->assertStatus(200);
+        $user = User::factory()->create();
+        $item = Item::factory()->create();
+
+        $this->actingAs($user);
+
+        $response = $this->post("/item/{$item->id}/favorite");
+        $response->assertRedirect();
+        $this->assertDatabaseHas('favorites', [
+            'user_id' => $user->id,
+            'item_id' => $item->id,
+        ]);
+
+        $response = $this->post("/item/{$item->id}/favorite");
+        $response->assertRedirect();
+        $this->assertDatabaseMissing('favorites', [
+            'user_id' => $user->id,
+            'item_id' => $item->id
+        ]);
     }
 }
