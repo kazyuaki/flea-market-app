@@ -2,21 +2,39 @@
 
 namespace Tests\Feature;
 
+use App\Models\Item;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ItemSearchTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function test_example()
-    {
-        $response = $this->get('/');
+    use RefreshDatabase;
 
-        $response->assertStatus(200);
+    /** @test */
+    public function testProductSearchByPartialName()
+    {
+        /** @var \App\Models\User $user */
+        $user = User::factory()->create(['id' => 1]);
+
+        Item::factory()->create([
+            'name' => 'RedShoes',
+            'user_id' => $user->id
+        ]);
+
+        Item::factory()->create([
+            'name' => 'RedShoes',
+            'user_id' => $user->id
+        ]);
+
+        Item::factory()->create([
+            'name' => 'BlueHat',
+            'user_id' => $user->id
+        ]);
+
+        $response = $this->get('/?keyword=Red');
+
+        $response->assertSee('RedShoes');
+        $response->assertDontSee('BlueHat');
     }
 }

@@ -12,8 +12,9 @@ use Tests\TestCase;
 class ItemIndexTest extends TestCase
 {
     use RefreshDatabase;
-    /** @test */
 
+    /** @test */
+    //全商品取得
     public function testAllItemsAreDisplayed()
     {
         $user = User::factory()->create();
@@ -26,7 +27,7 @@ class ItemIndexTest extends TestCase
         }
     }
 
-
+    //「SOLD」表示
     public function testPurchasedItemIsMarkedAsSold()
     {
         /** @var \App\Models\User $user */
@@ -50,6 +51,7 @@ class ItemIndexTest extends TestCase
         $response->assertSee('SOLD');
     }
 
+    //出品商品の非表示
     public function testUserCannotSeeOwnItems()
     {
         /** @var \App\Models\User $user */

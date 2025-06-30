@@ -25,6 +25,7 @@ class ExhibitionRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
+            'brand' => 'nullable|string|max:255',
             'detail' => 'required|string|max:255',
             'img' => 'required|image|mimes:jpeg,png',
             'categories' => 'required|array|min:1',
@@ -37,6 +38,10 @@ class ExhibitionRequest extends FormRequest
     {
         return [
             'name.required' => '商品名は必須です。',
+            'name.string' => '商品名は文字列で入力してください。',
+            'name.max' => '商品名は255文字以内で入力してください。',
+            'brand.string' => 'ブランド名は文字列で入力してください。',
+            'name.max' => 'ブランド名は255文字以内で入力してください。',
             'detail.required' => '商品説明は必須です。',
             'detail.max' => '商品説明は255文字以内で入力してください。',
             'img.required' => '商品画像のアップロードは必須です。',

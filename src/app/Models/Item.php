@@ -13,6 +13,7 @@ class Item extends Model
         'user_id',
         'category_id',
         'name',
+        'brand',
         'price',
         'detail',
         'img',
@@ -49,7 +50,6 @@ class Item extends Model
     {
         return $this->hasMany(Order::class);
     }
-
 
     public function getConditionLabelAttribute()
     {

@@ -13,7 +13,7 @@ class LoginTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-
+    //メールアドレス バリデーションテスト
     public function testLoginFailsWhenEmailIsMissing()
     {
         $response = $this->post('/login',[
@@ -23,6 +23,7 @@ class LoginTest extends TestCase
         $response->assertSessionHasErrors(['email']);
     }
 
+    //パスワード未入力 バリデーションテスト
     public function testLoginFailsWhenPasswordIsMissing()
     {
         $response = $this->post('/login', [
@@ -33,6 +34,7 @@ class LoginTest extends TestCase
         $response->assertSessionHasErrors(['password']);
     }
 
+    //入力情報の誤り バリデーションテスト
     public function testLoginFailsWithInvalidCredentials()
     {
         $response = $this->post('/login', [
@@ -43,6 +45,7 @@ class LoginTest extends TestCase
         $response->assertSessionHas('error', 'ログイン情報が登録されていません');
     }
 
+    //ログイン成功 テスト
     public function testLoginSucceedsWithValidCredentials()
     {
         $user = User::factory()->create([

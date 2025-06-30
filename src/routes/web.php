@@ -50,8 +50,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/sell', [ItemController::class, 'create'])->name('item.create');
     Route::post('/sell', [ItemController::class, 'store'])->name('item.store');
 
-
-
     //いいね・コメント送信
     Route::post('/item/{item}/favorite', [FavoriteController::class, 'toggle'])->name('items.favorite');
     Route::post('/item/{item_id}/comment', [CommentController::class, 'store'])->name('comment.store');
@@ -68,4 +66,5 @@ Route::middleware('auth')->group(function () {
     Route::post('/purchase/checkout/{item}', [PurchaseController::class, 'checkout'])->name('purchase.checkout');
     Route::get('/purchase/complete/{item}', [PurchaseController::class, 'complete'])->name('purchase.complete');
     Route::get('/purchase/cancel/{item}', [PurchaseController::class, 'cancel'])->name('purchase.cancel');
+    Route::post('/purchase/mock-complete/{item}', [PurchaseController::class, 'mockComplete']);
 });

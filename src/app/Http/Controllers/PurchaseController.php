@@ -122,6 +122,23 @@ class PurchaseController extends Controller
 
         return redirect()->route('items.index')->with('status', '購入が完了しました！');
     }
+    //支払い方法がコンビニ払いの場合
+    public function mockComplete(Item $item)
+    {
+        $user = auth()->user();
+
+        Order::create([
+            'user_id' => $user->id,
+            'item_id' => $item->id,
+            'payment_method' => 1, // コンビニ払いを表す
+            'shipping_post_code' => $user->post_code,
+            'shipping_address' => $user->address,
+            'shipping_building' => $user->building_name,
+        ]);
+
+        return redirect()->route('purchase.complete', ['item' => $item->id])
+            ->with('status', 'テスト購入が完了しました！');
+    }
 
     public function cancel(Request $request, Item $item)
     {

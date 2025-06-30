@@ -11,7 +11,7 @@ class RegisterTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-
+    //名前のバリデーションテスト
     public function testName()
     {
         $response = $this->post('/register', [
@@ -25,6 +25,7 @@ class RegisterTest extends TestCase
     }
 
     /** @test */
+    //メールのバリデーションテスト
     public function testEmail()
     {
         $response = $this->post('/register', [
@@ -33,11 +34,12 @@ class RegisterTest extends TestCase
             'password' => 'password123',
             'password_confirmation' => 'password123',
         ]);
-
+        
         $response->assertSessionHasErrors(['email']);
     }
-
+    
     /** @test */
+    //パスワードのバリデーションテスト
     public function testPassword()
     {
         $response = $this->post('/register', [
@@ -51,6 +53,7 @@ class RegisterTest extends TestCase
     }
 
     /** @test */
+    //パスワード7文字以内入力確認バリデーションテスト
     public function testPasswordMin()
     {
         $response = $this->post('/register', [
@@ -59,12 +62,12 @@ class RegisterTest extends TestCase
             'password' => 'short7',
             'password_confirmation' => 'short7',
         ]);
-
+        
         $response->assertSessionHasErrors(['password']);
     }
-
+    
     /** @test */
-
+    //パスワード一致のバリデーションテスト
     public function testPasswordNotMatch()
     {
         $response = $this->post('/register', [
@@ -73,11 +76,12 @@ class RegisterTest extends TestCase
             'password' => 'password123',
             'password_confirmation' => 'different123',
         ]);
-
+        
         $response->assertSessionHasErrors(['password']);
     }
-
+    
     /** @test */
+    //会員登録成功 テスト
     public function testRegister()
     {
         $response = $this->post('/register', [

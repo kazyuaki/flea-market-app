@@ -25,6 +25,9 @@ class ProfileRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
+            'post_code' => 'required',  //|string|regex:/^\d{3}-\d{4}$/','
+            'address' => 'required|string|max:255',
+            'building_name' => 'nullable|string|max:255',
             'profile_image' => 'nullable|image|mimes:jpeg,png',
         ];
     }
@@ -32,7 +35,14 @@ class ProfileRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'ユーザー名を入力してください。',
+            'name.required' => 'お名前を入力してください。',
+            'name.string' => 'お名前を文字列で入力してください。',
+            'name.max' => 'お名前を255文字以内で入力してください。',
+            'post_code.required' => '郵便番号を入力してください。',
+            // 'post_code.regex' => '郵便番号は「123-4567」の形式で入力してください。',
+            'address.required' => '住所を入力してください。',
+            'address.string' => '住所を文字列で入力してください。',
+            'address.max' => '住所を255文字以内で入力してください。',
             'profile_image.image' => '画像ファイルを選択してください。',
             'profile_image.mimes' => '画像形式はJPEGまたはPNGにしてください。',
         ];

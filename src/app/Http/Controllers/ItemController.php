@@ -26,9 +26,13 @@ class ItemController extends Controller
             if (!auth()->check()) {
                 $items = collect();
             } else {
-                $items = $user->favorites()->when($keyword, function ($query, $keyword) {
-                    $query->where('name', 'like', '%' . $keyword . '%');
-                })->latest()->get();
+                $items = $user->favorites()
+                    ->where('items.user_id', '!=', $user->id)
+                    ->when($keyword, function ($query, $keyword) {
+                        $query->where('name', 'like', '%' . $keyword . '%');
+                    })
+                    ->latest()
+                    ->get();
             }
             $activeTab = 'mylist';
         } else {
