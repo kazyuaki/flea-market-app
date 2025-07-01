@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Item;
-use App\Models\User;
 use App\Models\Order;
 use App\Http\Requests\AddressRequest;
-use Illuminate\Support\Facades\Auth;
 use Stripe\Stripe;
-use Stripe\Checkout\Session;
+use App\Services\StripeService;
+
 
 class PurchaseController extends Controller
 {
@@ -53,7 +52,7 @@ class PurchaseController extends Controller
             ->with('payment_method', '未選択'); // ← セッションに入れて渡す
     }
 
-    public function checkout(Request $request, Item $item)
+    public function checkout(Request $request, Item $item, StripeService $stripeService)
     {
         $user = auth()->user();
 
@@ -76,24 +75,7 @@ class PurchaseController extends Controller
 
         Stripe::setApiKey(config('services.stripe.secret'));
 
-        $session = \Stripe\Checkout\Session::create([
-            'payment_method_types' => [$payment_method_type],
-            'line_items' => [[
-                'price_data' => [
-                    'currency' => 'jpy',
-                    'product_data' => [
-                        'name' => $item->name,
-                    ],
-                    'unit_amount' => $item->price,
-                ],
-                'quantity' => 1,
-            ]],
-            'mode' => 'payment',
-            'success_url' => route('purchase.complete', ['item' => $item->id, 'method' => $payment_method_code]),
-            'cancel_url' => route('purchase.cancel', ['item' => $item->id]),
-            'customer_email' => $user->email,
-        ]);
-
+        $session = $stripeService->createCheckoutSession($user, $item, $payment_method_type, $payment_method_code);
         return redirect($session->url);
     }
 
