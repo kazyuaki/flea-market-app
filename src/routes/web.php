@@ -35,7 +35,7 @@ Route::middleware('guest')->group(function () {
 });
 
 # 認証ユーザー専用
-Route::middleware('auth')->group(function () {
+Route::middleware('auth', 'verified', 'profile.set')->group(function () {
 
     // マイページ・プロフィール
     Route::get('/mypage', [UserController::class, 'index'])->name('mypage');

@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Auth\Events\Registered;
 use App\Models\User;
 use App\Http\Requests\RegisterRequest; // ← フォームリクエスト
 
@@ -26,8 +24,11 @@ class RegisterController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        $user->sendEmailVerificationNotification();
+
         Auth::login($user);
 
-        return redirect('/mypage/profile');
+        // Fortifyが提供する「メール認証してください」画面へ
+        return redirect()->route('verification.notice');
     }
 }
