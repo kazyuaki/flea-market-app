@@ -38,7 +38,10 @@ class ItemController extends Controller
         } else {
             $items = Item::when($keyword, function ($query, $keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%');
-            })->where('user_id', 1) // ダミーユーザーだけ表示
+            })
+                ->when(auth()->check(), function ($query) use ($user) {
+                    $query->where('user_id', '!=', $user->id);
+                })
                 ->latest()
                 ->get();
             $activeTab = 'recommend';

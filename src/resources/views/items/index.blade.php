@@ -35,6 +35,8 @@
             @else
             「いいね」した商品はありません。
             @endif
+        @else
+        ログインしてください。
         @endif
      </p>
      @endforelse

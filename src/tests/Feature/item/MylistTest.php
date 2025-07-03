@@ -20,14 +20,14 @@ class MylistTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $favoritedItem = Item::factory()->create();
-        $notFavoritedItem = Item::factory()->create();
+        $favoritedItem = Item::factory()->create(['name' => 'Favorited']);
+        $notFavoritedItem = Item::factory()->create(['name' => 'Notfavorited']);
 
         $user->favorites()->attach($favoritedItem->id);
 
         $response = $this->get('/?tab=mylist');
-        $response->assertSee($favoritedItem->name);
-        $response->assertDontsee($notFavoritedItem->name);
+        $response->assertSee('Favorited');
+        $response->assertDontsee('Notfavorited');
     }
 
     //「SOLD」表示
@@ -89,6 +89,6 @@ class MylistTest extends TestCase
         $response = $this->get('/?tab=mylist');
         $response->assertStatus(200);
 
-        $response->assertDontSee($item->name);
+        $response->assertSee('ログインしてください。');
     }
 }

@@ -17,7 +17,7 @@ class FavoriteTest extends TestCase
     {
         /** @var \App\Models\User $user */
 
-        $user = User::factory()->create();
+        $user = User::factory()->create(['is_profile_set' => true]);
         $item = Item::factory()->create();
 
         $this->actingAs($user);

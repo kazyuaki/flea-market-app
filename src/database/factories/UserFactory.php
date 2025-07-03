@@ -23,7 +23,7 @@ class UserFactory extends Factory
             'post_code' => $this->faker->postcode(),          // ←追加
             'address' => $this->faker->address(),             // ←追加
             'building_name' => $this->faker->secondaryAddress(), 
-            'remember_token' => Str::random(10),
+            'is_profile_set' => true,
         ];
     }
 

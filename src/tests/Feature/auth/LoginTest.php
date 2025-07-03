@@ -16,7 +16,7 @@ class LoginTest extends TestCase
     //メールアドレス バリデーションテスト
     public function testLoginFailsWhenEmailIsMissing()
     {
-        $response = $this->post('/login',[
+        $response = $this->post('/login', [
             'email' => '',
             'password' => 'password123'
         ]);
@@ -42,7 +42,9 @@ class LoginTest extends TestCase
             'password' => 'invalidpass'
         ]);
 
-        $response->assertSessionHas('error', 'ログイン情報が登録されていません');
+        $response->assertSessionHasErrors([
+            'email' => 'ログイン情報が登録されていません。',
+        ]);
     }
 
     //ログイン成功 テスト
@@ -58,7 +60,7 @@ class LoginTest extends TestCase
             'password' => 'password123'
         ]);
 
-        $response->assertRedirect('/'); 
+        $response->assertRedirect('/');
 
         $this->assertAuthenticatedAs($user);
     }
