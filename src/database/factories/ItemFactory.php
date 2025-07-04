@@ -21,7 +21,6 @@ class ItemFactory extends Factory
             'name' => $this->faker->word(),
             'price' => $this->faker->numberBetween(100, 10000),
             'detail' => $this->faker->text(100),
-            'img' => 'default.png', // テスト用画像ファイル名などでOK
             'condition' => $this->faker->numberBetween(1, 5),
         ];
     }

@@ -23,7 +23,7 @@ class ItemExhibitionTest extends TestCase
 
         $this->actingAs($user);
 
-        $file = \Illuminate\Http\UploadedFile::fake()->image('item.jpg');
+        $file = \Illuminate\Http\UploadedFile::fake()->create('item.jpg', 100);
 
         $response = $this->post(route('item.store'), [
             'name' => 'テスト商品',
@@ -31,9 +31,10 @@ class ItemExhibitionTest extends TestCase
             'price' => 5000,
             'detail' => 'これはテスト用の商品説明です。',
             'condition' => 2,
-            'img' => $file,
+            'images' => [$file],
             'categories' => [$category->id],
         ]);
+
 
         $response->assertRedirect();
 

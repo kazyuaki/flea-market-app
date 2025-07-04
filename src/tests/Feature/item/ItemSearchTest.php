@@ -14,23 +14,25 @@ class ItemSearchTest extends TestCase
     /** @test */
     public function testProductSearchByPartialName()
     {
-        /** @var \App\Models\User $user */
         $user = User::factory()->create(['id' => 1]);
 
-        Item::factory()->create([
+        $redItem1 = Item::factory()->create([
             'name' => 'RedShoes',
             'user_id' => $user->id
         ]);
+        $redItem1->images()->create(['file_path' => 'test_image.png']);
 
-        Item::factory()->create([
+        $redItem2 = Item::factory()->create([
             'name' => 'RedShoes',
             'user_id' => $user->id
         ]);
+        $redItem2->images()->create(['file_path' => 'test_image.png']);
 
-        Item::factory()->create([
+        $blueItem = Item::factory()->create([
             'name' => 'BlueHat',
             'user_id' => $user->id
         ]);
+        $blueItem->images()->create(['file_path' => 'test_image.png']);
 
         $response = $this->get('/?keyword=Red');
 

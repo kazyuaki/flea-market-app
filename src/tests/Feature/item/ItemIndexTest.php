@@ -20,6 +20,12 @@ class ItemIndexTest extends TestCase
         $user = User::factory()->create();
         $items = Item::factory()->count(3)->create(['user_id' => $user->id]);
 
+
+        // 画像も登録
+        foreach ($items as $item) {
+            $item->images()->create(['file_path' => 'test_image.png']);
+        }
+
         $response = $this->get('/');
 
         foreach ($items as $item) {
@@ -37,6 +43,7 @@ class ItemIndexTest extends TestCase
         $this->actingAs($user);
 
         $item = Item::factory()->create(['user_id' => $displayUser->id]);
+        $item->images()->create(['file_path' => 'test_image.png']);
 
         Order::factory()->create([
             'user_id' => $user->id,
@@ -62,11 +69,16 @@ class ItemIndexTest extends TestCase
 
         $this->actingAs($loggedInUser);
 
-        $ownItem = Item::factory()->create(['user_id' => $loggedInUser->id]);
+        $ownItem = Item::factory()->create([
+            'user_id' => $loggedInUser->id,
+            'name' => 'MyOwnItemForTest123'
+        ]);        $ownItem->images()->create(['file_path' => 'test_image.png']);
+
         $otherItem = Item::factory()->create(['user_id' => $displayUser->id]);
+        $otherItem->images()->create(['file_path' => 'test_image.png']);
 
         $response = $this->get('/');
-        $response->assertDontSee($ownItem->name);
+        $response->assertDontSee('MyOwnItemForTest123');
         $response->assertSee($otherItem->name);
     }
 }

@@ -33,6 +33,7 @@ class ItemDetailTest extends TestCase
             'condition' => 1
         ]);
         $item->categories()->attach([$category1->id, $category2->id]);
+        $item->images()->create(['file_path' => 'test_image.png']);
 
         // 3️⃣ お気に入り（いいね数用）
         $item->favorites()->attach($user->id);

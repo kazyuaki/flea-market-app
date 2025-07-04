@@ -21,7 +21,10 @@ class MylistTest extends TestCase
         $this->actingAs($user);
 
         $favoritedItem = Item::factory()->create(['name' => 'Favorited']);
+        $favoritedItem->images()->create(['file_path' => 'test_image.png']);
+
         $notFavoritedItem = Item::factory()->create(['name' => 'Notfavorited']);
+        $notFavoritedItem->images()->create(['file_path' => 'test_image.png']);
 
         $user->favorites()->attach($favoritedItem->id);
 
@@ -38,6 +41,8 @@ class MylistTest extends TestCase
         $this->actingAs($user);
 
         $item = Item::factory()->create();
+        $item->images()->create(['file_path' => 'test_image.png']);
+
         $user->favorites()->attach($item->id);
 
         Order::factory()->create([
@@ -64,10 +69,12 @@ class MylistTest extends TestCase
             'user_id' => $user->id,
             'name' => 'MyOwnItem'
         ]);
+        $ownItem->images()->create(['file_path' => 'test_image.png']);
 
         $otherItem = Item::factory()->create([
             'name' => 'OtherPersonsItem'
         ]);
+        $otherItem->images()->create(['file_path' => 'test_image.png']);
 
         // お気に入り登録
         $user->favorites()->attach([$ownItem->id, $otherItem->id]);
@@ -85,10 +92,10 @@ class MylistTest extends TestCase
     public function testMylistShowsNothingForGuests()
     {
         $item = Item::factory()->create();
+        $item->images()->create(['file_path' => 'test_image.png']);
 
         $response = $this->get('/?tab=mylist');
         $response->assertStatus(200);
-
         $response->assertSee('ログインしてください。');
     }
 }
