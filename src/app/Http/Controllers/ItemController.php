@@ -31,6 +31,7 @@ class ItemController extends Controller
                     ->when($keyword, function ($query, $keyword) {
                         $query->where('name', 'like', '%' . $keyword . '%');
                     })
+                    ->with('images')
                     ->latest()
                     ->get();
             }
@@ -42,6 +43,7 @@ class ItemController extends Controller
                 ->when(auth()->check(), function ($query) use ($user) {
                     $query->where('user_id', '!=', $user->id);
                 })
+                ->with('images')
                 ->latest()
                 ->get();
             $activeTab = 'recommend';
@@ -62,7 +64,7 @@ class ItemController extends Controller
         //$item = Item::with(['categories', 'favorites', 'comments.user'])->findOrFail($id);
 
         //ルートで$item を受け取っている場合（暗黙の結合）
-        $item->load(['categories', 'favorites', 'comments.user']);
+        $item->load(['categories', 'favorites', 'comments.user', 'images']);
         return view('items.show', compact('item'));
     }
 
@@ -83,12 +85,17 @@ class ItemController extends Controller
             'price' => $request->price,
             'detail' => $request->detail,
             'condition' => $request->condition,
-            'img' => $request->hasFile('img')
-                ? $request->file('img')->store('items', 'public')
-                : null,
         ]);
         // カテゴリーの中間テーブルへ登録
         $item->categories()->sync($request->categories);
+
+        // 画像を保存
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $imageFile) {
+                $path = $imageFile->store('items', 'public');
+                $item->images()->create(['file_path' => $path]);
+            }
+        }
 
         return redirect('/')->with('status', '商品を出品しました！');
     }

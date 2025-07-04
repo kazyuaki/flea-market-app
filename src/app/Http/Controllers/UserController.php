@@ -33,7 +33,7 @@ class UserController extends Controller
         $user->building_name = $request->building_name;
 
         if ($request->hasFile('profile_image')) {
-            $path = $request->file('profile_image')->store('profile', 'public');
+            $path = $request->file('profile_image')->store('profiles', 'public');
             $user->profile_image = $path;
         }
 

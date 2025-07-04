@@ -14,10 +14,17 @@
      @forelse($items as $item)
      <div class="item">
          <a href="{{ route('item.show', ['item' => $item->id]) }}">
-             @if (Str::startsWith($item->img, 'http'))
-             <img src="{{ $item->img }}" alt="商品画像">
+             @if ($item->images->isNotEmpty())
+             @php
+             $imagePath = $item->images->first()->file_path;
+             @endphp
+             @if (Str::startsWith($imagePath, 'http'))
+             <img src="{{ $imagePath }}" alt="商品画像">
              @else
-             <img src="{{ asset('storage/' . $item->img) }}" alt="商品画像">
+             <img src="{{ asset('storage/' . $imagePath) }}" alt="商品画像">
+             @endif
+             @else
+             <img src="{{ asset('storage/default.png') }}" alt="商品画像">
              @endif
              <div class="item-name">{{ $item->name }}</div>
          </a>
@@ -29,15 +36,15 @@
      </div>
      @empty
      <p>
-        @if(auth()->check())
-            @if($activeTab === 'recommend')
-            お気に入りにした登録はありません。
-            @else
-            「いいね」した商品はありません。
-            @endif
-        @else
-        ログインしてください。
-        @endif
+         @if(auth()->check())
+         @if($activeTab === 'recommend')
+         お気に入りにした登録はありません。
+         @else
+         「いいね」した商品はありません。
+         @endif
+         @else
+         ログインしてください。
+         @endif
      </p>
      @endforelse
  </div>

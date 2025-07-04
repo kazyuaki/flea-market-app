@@ -24,6 +24,12 @@ class Item extends Model
     {
         return $this->belongsToMany(Category::class);
     }
+
+    public function images()
+    {
+        return $this->hasMany(Image::class);
+    }
+
     //これは「この商品をいいねしているユーザー一覧」を取るためのリレーション。
     public function favorites()
     {

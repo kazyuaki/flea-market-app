@@ -9,7 +9,18 @@
     <div class="item-detail">
         <div class="item-detail__image-box">
             <div class="item-detail__image">
-                <img src="{{Str::startsWith($item->img,'http') ? $item->img : asset('storage/' . $item->img) }}" alt="商品画像">
+                @if ($item->images->isNotEmpty())
+                @php
+                $imagePath = $item->images->first()->file_path;
+                @endphp
+                @if (Str::startsWith($imagePath, 'http'))
+                <img src="{{ $imagePath }}" alt="商品画像">
+                @else
+                <img src="{{ asset('storage/' . $imagePath) }}" alt="商品画像">
+                @endif
+                @else
+                <img src="{{ asset('storage/default.png') }}" alt="商品画像">
+                @endif
             </div>
         </div>
 

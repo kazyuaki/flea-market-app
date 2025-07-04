@@ -24,7 +24,7 @@ class CreateOrdersTable extends Migration
             $table->tinyInteger('payment_method');
             $table->string('shipping_post_code');
             $table->string('shipping_address');
-            $table->string('shipping_building');
+            $table->string('shipping_building')->nullable();
             $table->timestamps();
         });
     }
