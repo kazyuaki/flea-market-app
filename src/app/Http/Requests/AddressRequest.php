@@ -42,7 +42,7 @@ class AddressRequest extends FormRequest
             'address.string' => '住所は文字列で入力してください',
             'address.max' => '住所は255文字以内で入力してください',
             'building_name.required' => '建物名を入力してください' ,
-            'building_name.string' => '建物名は文字列で入力してください' 
+            'building_name.string' => '建物名は文字列で入力してください' ,
             'building_name.max' => '建物名は255文字以内で入力してください' 
         ];
     }
