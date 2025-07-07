@@ -13,7 +13,9 @@
     <header class="header">
         <div class="header__inner">
             <div class="header__logo">
-                <img src="../../img/logo.svg" alt="COACHTECH" width="350">
+                <a href="{{ route('items.index') }}">
+                    <img src="../../img/logo.svg" alt="COACHTECH" width="350">
+                </a>
             </div>
             <div class="search-bar">
                 <form action="{{ route('items.index') }}" method="GET">

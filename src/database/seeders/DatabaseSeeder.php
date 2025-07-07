@@ -17,9 +17,10 @@ class DatabaseSeeder extends Seeder
     {
         \App\Models\User::factory(10)->create();
         $this->call([
-            UserSeeder::class,          // 先に users
-            CategoriesTableSeeder::class, // 次に categories
-            ItemsTableSeeder::class,      // 最後に items
+            UserSeeder::class,
+            CategoriesTableSeeder::class,
+            ItemsTableSeeder::class,
+            ImagesTableSeeder::class
         ]);
     }
 }
