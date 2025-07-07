@@ -79,16 +79,6 @@
                     <button>購入する</button>
                 </div>
             </form>
-
-            <!-- ↓ここからモック購入用ボタン -- -->
-            <form action="/purchase/mock-complete/{{ $item->id }}" method="POST" style="margin-top: 16px;">
-                @csrf
-                <div class="item-purchase__button">
-                    <button style="background-color: #ccc;">
-                        この注文を購入済みにする（モック）
-                    </button>
-                </div>
-            </form>
         </div>
     </div>
     @endsection
