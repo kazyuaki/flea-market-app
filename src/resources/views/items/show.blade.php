@@ -53,7 +53,14 @@
                 <form action="{{ route('purchase.confirm', ['item' => $item->id]) }}" method="POST">
                     @csrf
                     <div class="item-purchase__button">
-                        <button>購入手続きへ</button>
+                        @if ($item->is_sold)
+                            <button class="btn-sold" disabled>売り切れ</button>
+                        @else
+                        <form action="{{ route('purchase.confirm', $item) }}" method="GET">
+                            @csrf
+                            <button type="submit" class="btn-primary">購入手続きへ</button>
+                        </form>
+                        @endif
                     </div>
                 </form>
             </section>

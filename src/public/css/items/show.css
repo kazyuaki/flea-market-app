@@ -86,11 +86,10 @@ body {
 }
 
 .item-purchase__button button {
-    background-color: #ff5a5a;
     color: white;
     border: none;
     padding: 12px 24px;
-    width:100%;
+    width: 100%;
     font-size: 28px;
     font-weight: bold;
     border-radius: 4px;
@@ -98,8 +97,19 @@ body {
     margin: 0 auto;
 }
 
-.item-purchase__button button:hover {
+.item-purchase__button .btn-primary {
+    background-color: #ff5a5a;
+}
+
+.item-purchase__button .btn-primary:hover {
     background-color: #e04848;
+}
+
+.btn-sold {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+    opacity: 0.7;
 }
 
 

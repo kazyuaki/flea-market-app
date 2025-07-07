@@ -60,11 +60,9 @@ class ItemController extends Controller
     //商品詳細画面の表示
     public function show(Item $item)
     {
-        // 自分で$item を取得する場合 今回のルーティングでは使えない（モデル取得済みのため）
-        //$item = Item::with(['categories', 'favorites', 'comments.user'])->findOrFail($id);
 
         //ルートで$item を受け取っている場合（暗黙の結合）
-        $item->load(['categories', 'favorites', 'comments.user', 'images']);
+        $item->load(['categories', 'favorites', 'comments.user', 'images','order']);
         return view('items.show', compact('item'));
     }
 

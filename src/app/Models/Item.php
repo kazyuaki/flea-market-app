@@ -47,16 +47,30 @@ class Item extends Model
         return $this->favoritedBy->contains($user);
     }
 
+    // 商品に紐づくコメントを取得するリレーション
     public function comments()
     {
         return $this->hasMany(Comment::class);
     }
 
+    // 商品が売却済みかどうかを判定するリレーション
     public function orders()
     {
         return $this->hasMany(Order::class);
     }
 
+    public function order()
+    {
+        return $this->hasOne(Order::class);
+    }
+
+    // 商品のユーザーを取得するリレーション
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    // 商品の状態を表すアクセサ
     public function getConditionLabelAttribute()
     {
         switch ($this->condition) {
@@ -71,6 +85,12 @@ class Item extends Model
             default:
                 return '不明';
         }
+    }
+
+    // 商品が売却済みかどうかを判定するアクセサ
+    public function getIsSoldAttribute()
+    {
+        return $this->order()->exists();
     }
 
     public function scopeSearchByNames($query, $keyword)
