@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Order;
 use App\Http\Requests\AddressRequest;
+use App\Http\Requests\PurchaseRequest;
 use Stripe\Stripe;
 use App\Services\StripeService;
 
@@ -15,11 +16,16 @@ class PurchaseController extends Controller
     public function confirm(Request $request, Item $item)
     {
         if ($request->isMethod('post')) {
-            $payment_method = $request->input('payment_method');
-            session(['payment_method' => $payment_method]);
+            // POSTならバリデーション
+            $validated = $request->validate([
+                'payment_method' => 'required',
+            ]);
+
+            session(['payment_method' => $validated['payment_method']]);
+
             return redirect()->route('purchase.confirm', ['item' => $item->id]);
         }
-
+        // GETなら確認画面
         $user = auth()->user();
         $payment_method = session('payment_method', '未選択'); // セッションから取得
 

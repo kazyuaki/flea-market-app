@@ -54,12 +54,9 @@
                     @csrf
                     <div class="item-purchase__button">
                         @if ($item->is_sold)
-                            <button class="btn-sold" disabled>売り切れ</button>
+                        <button class="btn-sold" disabled>売り切れ</button>
                         @else
-                        <form action="{{ route('purchase.confirm', $item) }}" method="GET">
-                            @csrf
-                            <button type="submit" class="btn-primary">購入手続きへ</button>
-                        </form>
+                        <a href="{{ route('purchase.confirm', $item) }}" class="btn-primary">購入手続きへ</a>
                         @endif
                     </div>
                 </form>
