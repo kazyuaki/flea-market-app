@@ -38,7 +38,7 @@ class RegisterRequest extends FormRequest
             'name.max' => 'お名前を255文字以内で入力してください',
             'email.required' => 'メールアドレスを入力してください。',
             'email.email' => 'メールアドレスの形式が正しくありません。',
-            'password.required' => 'パスワード入力してください。',
+            'password.required' => 'パスワードを入力してください。',
             'password.min' => 'パスワードは8文字以上で入力してください。',
             'password.confirmed' => 'パスワードと一致していません。',
         ];
