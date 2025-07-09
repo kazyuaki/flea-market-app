@@ -48,12 +48,12 @@ class UserController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = auth()->user();
-        $tab = $request->query('tab');
+        $page = $request->query('page');
 
-        if ($tab === 'buy') {
+        if ($page === 'buy') {
             $items = $user->purchasedItems()->latest()->get();
             $activeTab = 'buy';
-        } elseif ($tab === 'sell') {
+        } elseif ($page === 'sell') {
             $items = $user->items()->latest()->get();
             $activeTab = 'sell';
         } else {

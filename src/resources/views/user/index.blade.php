@@ -19,8 +19,8 @@
 
 
         <nav class="nav">
-            <a href="/mypage?tab=sell" class="{{ $activeTab === 'sell' ? 'active' : '' }}">出品した商品</a>
-            <a href="/mypage?tab=buy" class="{{ $activeTab === 'buy' ? 'active' : '' }}">購入した商品</a>
+            <a href="/mypage?page=sell" class="{{ $activeTab === 'sell' ? 'active' : '' }}">出品した商品</a>
+            <a href="/mypage?page=buy" class="{{ $activeTab === 'buy' ? 'active' : '' }}">購入した商品</a>
         </nav>
 
         <div class="item-list">

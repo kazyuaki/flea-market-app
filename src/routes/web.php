@@ -55,8 +55,8 @@ Route::middleware('auth', 'verified', 'profile.set')->group(function () {
     Route::post('/item/{item_id}/comment', [CommentController::class, 'store'])->name('comment.store');
 
     //購入手続き画面
-    Route::get('/purchase/confirm/{item}', [PurchaseController::class, 'confirm'])->name('purchase.confirm');
-    Route::post('/purchase/confirm/{item}', [PurchaseController::class, 'confirm'])->name('purchase.confirm.store');
+    Route::get('/purchase/{item}', [PurchaseController::class, 'confirm'])->name('purchase.confirm');
+    Route::post('/purchase/{item}', [PurchaseController::class, 'confirm'])->name('purchase.confirm.store');
 
     //配送先変更
     Route::get('/purchase/address/{item}', [PurchaseController::class, 'editAddress'])->name('purchase.address.edit');

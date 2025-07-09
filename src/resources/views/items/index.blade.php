@@ -7,7 +7,7 @@
  @section('content')
  <div class="tab-menu">
      <a href="{{ route('items.index') }}" class="tab-link {{ $activeTab === 'recommend' ? 'active' : '' }}">おすすめ</a>
-     <a href="{{ route('items.index', ['tab' => 'mylist']) }}" class="tab-link {{ $activeTab === 'mylist' ? 'active' : '' }}">マイリスト</a>
+     <a href="{{ route('items.index', ['page' => 'mylist']) }}" class="tab-link {{ $activeTab === 'mylist' ? 'active' : '' }}">マイリスト</a>
  </div>
 
  <div class="item-list">

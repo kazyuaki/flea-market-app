@@ -20,7 +20,7 @@
                     <img src="{{ asset('storage/' . $imagePath) }}" alt="商品画像">
                     @endif
                     @else
-                    <img src="{{ asset('storage/default.png') }}" alt="商品画像">
+                    <img src="{{ asset('img/noimage.png') }}" alt="商品画像">
                     @endif
                 </div>
                 <div class="item-detail__info">

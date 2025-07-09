@@ -19,7 +19,7 @@
                 <img src="{{ asset('storage/' . $imagePath) }}" alt="商品画像">
                 @endif
                 @else
-                <img src="{{ asset('storage/default.png') }}" alt="商品画像">
+                <img src="{{ asset('img/noimage.png') }}" alt="商品画像">
                 @endif
             </div>
         </div>
@@ -55,6 +55,8 @@
                     <div class="item-purchase__button">
                         @if ($item->is_sold)
                         <button class="btn-sold" disabled>売り切れ</button>
+                        @elseif($item->user_id === auth()->id())
+                        <button class="btn-secondary" disabled>自分の商品です</button>
                         @else
                         <a href="{{ route('purchase.confirm', $item) }}" class="btn-primary">購入手続きへ</a>
                         @endif

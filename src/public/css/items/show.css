@@ -106,6 +106,16 @@ body {
     background-color: #e04848;
 }
 
+.btn-sold
+.btn-secondary {
+    background-color: #cccccc;
+    color: #666666;
+    width: 200px;
+    font-size: 28px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: not-allowed;
+}
 .btn-sold {
     background-color: #cccccc;
     color: #666666;

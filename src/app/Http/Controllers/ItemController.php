@@ -19,10 +19,10 @@ class ItemController extends Controller
         /** @var \App\Models\User $user */
         $user = auth()->user();
 
-        $tab = $request->query('tab');
+        $page = $request->query('page');
         $keyword = $request->query('keyword');
 
-        if ($tab === 'mylist') {
+        if ($page === 'mylist') {
             if (!auth()->check()) {
                 $items = collect();
             } else {
@@ -62,7 +62,7 @@ class ItemController extends Controller
     {
 
         //ルートで$item を受け取っている場合（暗黙の結合）
-        $item->load(['categories', 'favorites', 'comments.user', 'images','order']);
+        $item->load(['categories', 'favorites', 'comments.user', 'images', 'order']);
         return view('items.show', compact('item'));
     }
 
