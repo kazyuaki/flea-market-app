@@ -43,7 +43,7 @@
          「いいね」した商品はありません。
          @endif
          @else
-         ログインしてください。
+         <a href="{{ route('login') }}">ログインしてください。</a>
          @endif
      </p>
      @endforelse

@@ -76,7 +76,7 @@
                         <th>カテゴリ</th>
                         <td>
                             @foreach($item->categories as $category)
-                            {{ $category->content }}@if (!$loop->last)、@endif
+                            <span class="category-badge">{{ $category->content }}</span>
                             @endforeach
                         </td>
                     </tr>

@@ -79,3 +79,56 @@
 .nav-links .logout-button:hover {
     opacity: 0.7;
 }
+
+@media (max-width: 900px) {
+    .header {
+        height: auto;
+        padding: 20px;
+    }
+
+    .header__inner {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .header__logo {
+        font-size: 20px;
+        width: 100%;
+        margin-bottom: 0;
+        text-align: left;
+        position: relative;
+    }
+
+    .search-bar {
+        width: 70%;
+    }
+
+    .search-bar input {
+        width: 100%;
+        max-width: 100%;
+        padding: 12px 20px;
+        font-size: 20px;
+    }
+
+    .nav-links {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        position: absolute;
+        top: 25px;
+        left: 32%;
+        }
+
+    .nav-links a,
+    .nav-links .logout-button,
+    .nav-links a.sell-button {
+        font-size: 15px;
+    }
+
+    .nav-links a.sell-button {
+        padding: 5px 10px;
+        width: auto;
+    } 
+}

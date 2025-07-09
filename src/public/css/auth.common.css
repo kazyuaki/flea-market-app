@@ -16,3 +16,24 @@
     font-weight: bold;
     font-size: 50px;
 }
+
+@media (max-width: 900px) {
+    .header {
+        height: auto;
+        padding: 20px;
+    }
+
+    .header__inner {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .header__logo {
+        font-size: 20px;
+        width: 100%;
+        margin-bottom: 0;
+        text-align: left;
+        position: relative;
+    }
+}

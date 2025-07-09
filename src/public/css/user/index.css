@@ -65,8 +65,6 @@
     border-bottom: 2px solid red;
 }
 
-
-
 .item-list {
     display: flex;
     flex-wrap: wrap;
@@ -89,3 +87,25 @@
     margin-top: 8px;
     font-size: 20px;
 }
+
+@media(max-width: 900px) {
+    .mypage__content {
+        max-width: 850px;
+   }
+   .user {
+       margin-left: 100px;
+       gap: 40px;
+   }
+   .user h2 {
+       font-size: 25px;
+   }
+
+   .profile__button {
+       margin-right: 150px;
+   }
+
+   .profile__button-submit {
+       font-size: 15px;
+   }
+
+}   

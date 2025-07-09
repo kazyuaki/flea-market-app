@@ -7,7 +7,6 @@ body {
 
 .tab-menu {
     display: flex;
-    /* 横並び */
     border-bottom: 1px solid #ccc;
     margin: 20px 30px;
     padding-left: 70px;
@@ -56,4 +55,14 @@ body {
 .sold-label {
     color: red;
     font-weight: bold;
+}
+
+@media (max-width: 900px) {
+    .item-list {
+        display: flex;
+        gap: 30px;
+        flex-wrap: wrap;
+        padding: 20px;
+        justify-content: center ;
+    }
 }

@@ -39,7 +39,7 @@
                     <form action="{{ route('purchase.confirm.store', [ 'item' => $item->id ]) }}" method="POST">
                         @csrf
                         <select name="payment_method" onchange="this.form.submit()">
-                            <option value="">選択してください</option>
+                            <option value="" hidden>選択してください</option>
                             <option value="コンビニ払い" {{ session('payment_method') == 'コンビニ払い' ? 'selected' : '' }}>コンビニ払い</option>
                             <option value="カード払い" {{ session('payment_method') == 'カード払い' ? 'selected' : '' }}>カード払い</option>
                             @error('payment_method')
