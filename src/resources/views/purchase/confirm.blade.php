@@ -42,12 +42,16 @@
                             <option value="" hidden>選択してください</option>
                             <option value="コンビニ払い" {{ session('payment_method') == 'コンビニ払い' ? 'selected' : '' }}>コンビニ払い</option>
                             <option value="カード払い" {{ session('payment_method') == 'カード払い' ? 'selected' : '' }}>カード払い</option>
-                            @error('payment_method')
-                            <div class="error-message">{{ $message }}</div>
-                            @enderror
                         </select>
                     </form>
                 </div>
+                @if ($errors->any())
+                <div class="error-message">
+                    @foreach ($errors->all() as $error)
+                    <p>{{ $error }}</p>
+                    @endforeach
+                </div>
+                @endif
             </section>
 
             <section class="shipping-address">

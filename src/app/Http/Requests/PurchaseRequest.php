@@ -23,9 +23,14 @@ class PurchaseRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'payment_method' => 'required',
-        ];
+        if ($this->isMethod('post')) {
+            return [
+                'payment_method' => 'required',
+            ];
+        }
+
+        // GETなど他のメソッドではバリデーションなし
+        return [];
     }
 
     public function messages()

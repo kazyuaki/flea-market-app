@@ -13,21 +13,16 @@ use App\Services\StripeService;
 
 class PurchaseController extends Controller
 {
-    public function confirm(Request $request, Item $item)
+    public function confirm(PurchaseRequest $request, Item $item)
     {
         if ($request->isMethod('post')) {
-            // POSTならバリデーション
-            $validated = $request->validate([
-                'payment_method' => 'required',
-            ]);
-
-            session(['payment_method' => $validated['payment_method']]);
+            session(['payment_method' => $request->input('payment_method')]);
 
             return redirect()->route('purchase.confirm', ['item' => $item->id]);
         }
-        // GETなら確認画面
+
         $user = auth()->user();
-        $payment_method = session('payment_method', '未選択'); // セッションから取得
+        $payment_method = session('payment_method', '未選択');
 
         return view('purchase.confirm', compact('item', 'user', 'payment_method'));
     }
