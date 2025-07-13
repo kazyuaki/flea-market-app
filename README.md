@@ -8,7 +8,8 @@
    
     `git clone git@github.com:kazyuaki/contact-form-test.git`
 
-  2. コンテナをビルド&起動. 
+  2. コンテナをビルド&起動
+   
     `docker-compose up -d --build`
 
   ※MySQL は、OS によって起動しない場合があるので、それぞれの PC に合わせて.  `docker-compose.yml` ファイルを編集してください
@@ -60,13 +61,9 @@ MAIL_FROM_NAME="${APP_NAME}"
 2. 会員登録後のメール認証画面から 認証メールを送信
    
 3. Mailhog サーバー上で 届いたメールを認証する
-   
-   http://localhost:8025
 
 #### 決済(Stripe)
 1. Stripeにサインイン
-   
-   https://stripe.com/jp
 
 2. 「開発者タブ」→ APIキーから公開可能キーとシークレットキーを取得
    
@@ -91,5 +88,7 @@ MAIL_FROM_NAME="${APP_NAME}"
 
 ## URL
 
-- [開発環境](http://localhost/)
+- 開発環境: http://localhost/
+- メール認証(Mailhog): http://localhost:8025
+- 決済(Stripe): https://stripe.com/jp
 
