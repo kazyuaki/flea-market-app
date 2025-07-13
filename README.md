@@ -3,8 +3,9 @@
 
 ## 環境構築
 
-- Docker のビルド
+#### Docker のビルド
   1. リポジトリをクローン
+   
     `git clone git@github.com:kazyuaki/contact-form-test.git`
 
   2. コンテナをビルド&起動. 
@@ -35,6 +36,7 @@
    `php artisan migrate`
 
 6. シーディング
+   
    `php artisan db:seed`
 
 #### 管理者サンプルアカウント
