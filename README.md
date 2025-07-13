@@ -4,26 +4,37 @@
 ## 環境構築
 
 - Docker のビルド
-  1 リポジトリをクローン. 
+  1. リポジトリをクローン
     `git clone git@github.com:kazyuaki/contact-form-test.git`
-  2 コンテナをビルド&起動. 
-    `docker-compose up -d --build`.
+
+  2. コンテナをビルド&起動. 
+    `docker-compose up -d --build`
 
   ※MySQL は、OS によって起動しない場合があるので、それぞれの PC に合わせて.  `docker-compose.yml` ファイルを編集してください
 
 #### Laravel 環境構築
 
 1. コンテナに入る. 
+   
    `docker-compose exec php bash`
-2. 依存パッケージをインストール. 
+
+2. 依存パッケージをインストール
+   
    `composer install`
-3. 環境変数ファイルをコピー. 
+
+3. 環境変数ファイルをコピー
+   
    `cp .env.example env` 
-4. アプリケーションキーを生成. 
+
+4. アプリケーションキーを生成
+   
    `php artisan key:generate`
-5. マイグレーション. 
+  
+5. マイグレーション
+   
    `php artisan migrate`
-6. シーディング. 
+
+6. シーディング
    `php artisan db:seed`
 
 #### 管理者サンプルアカウント
@@ -45,13 +56,18 @@ MAIL_FROM_ADDRESS=null
 MAIL_FROM_NAME="${APP_NAME}"
 ```
 2. 会員登録後のメール認証画面から 認証メールを送信
-3. Mailhog サーバー上で 届いたメールを認証する. 
+   
+3. Mailhog サーバー上で 届いたメールを認証する
+   
    http://localhost:8025
 
 #### 決済(Stripe)
-1. Stripeにサインイン. 
+1. Stripeにサインイン
+   
    https://stripe.com/jp
+
 2. 「開発者タブ」→ APIキーから公開可能キーとシークレットキーを取得
+   
 3. `.env` に設定
     ```
     STRIPE_KEY=
@@ -74,3 +90,4 @@ MAIL_FROM_NAME="${APP_NAME}"
 ## URL
 
 - [開発環境](http://localhost/)
+
