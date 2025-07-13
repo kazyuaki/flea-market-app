@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use App\Http\Requests\RegisterRequest; // ← フォームリクエスト
+use App\Http\Requests\RegisterRequest; 
 
 
 class RegisterController extends Controller
