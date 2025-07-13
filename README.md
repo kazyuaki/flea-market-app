@@ -16,29 +16,29 @@
 
 #### Laravel 環境構築
 
-1. コンテナに入る. 
+1. コンテナに入る
    
-   `docker-compose exec php bash`
+    `docker-compose exec php bash`
 
 2. 依存パッケージをインストール
    
-   `composer install`
+    `composer install`
 
 3. 環境変数ファイルをコピー
    
-   `cp .env.example env` 
+    `cp .env.example env` 
 
 4. アプリケーションキーを生成
    
-   `php artisan key:generate`
+    `php artisan key:generate`
   
 5. マイグレーション
    
-   `php artisan migrate`
+    `php artisan migrate`
 
 6. シーディング
    
-   `php artisan db:seed`
+    `php artisan db:seed`
 
 #### 管理者サンプルアカウント
 シーディング後、以下のアカウントでログインできます。
