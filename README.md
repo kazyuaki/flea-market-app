@@ -9,7 +9,7 @@
     git clone git@github.com:kazyuaki/contact-form-test.git
     `
 
-  2. コンテナをビルド&起動
+  2. コンテナをビルド&起動. 
     `
     docker-compose up -d --build
     `
