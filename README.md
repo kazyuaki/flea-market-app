@@ -4,13 +4,15 @@
 ## 環境構築
 
 #### Docker のビルド
-  1. リポジトリをクローン
-   
-    `git clone git@github.com:kazyuaki/contact-form-test.git`
+  1. リポジトリをクローン  
+    `
+    git clone git@github.com:kazyuaki/contact-form-test.git
+    `
 
   2. コンテナをビルド&起動
-   
-    `docker-compose up -d --build`
+    `
+    docker-compose up -d --build
+    `
 
   ※MySQL は、OS によって起動しない場合があるので、それぞれの PC に合わせて.  `docker-compose.yml` ファイルを編集してください
 
