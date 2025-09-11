@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 use App\Http\Requests\ProfileRequest;
+use App\Models\Transaction;
 
 
 class UserController extends Controller
@@ -21,6 +21,8 @@ class UserController extends Controller
 
         return view('user.setup', compact('user'));
     }
+
+
     //初回プロフィール設定を保存する
     public function storeProfile(ProfileRequest $request)
     {
@@ -43,24 +45,65 @@ class UserController extends Controller
         return redirect('/')->with('status', 'プロフィールを設定しました！');
     }
 
-    // プロフィール画面（閲覧用） /mypage/index
+
+    // プロフィール画面（閲覧用） /mypage
     public function index(Request $request)
     {
         /** @var \App\Models\User $user */
-        $user = auth()->user();
-        $page = $request->query('page');
+        $user = Auth::user();
+
+        $page = $request->query('page', 'sell');
+
+        $activeTab    = $page;
+        $items        = collect();
+        $transactions = collect();
 
         if ($page === 'buy') {
-            $items = $user->purchasedItems()->latest()->get();
-            $activeTab = 'buy';
+            $items = $user->purchasedItems()
+                ->with('images')
+                ->latest()
+                ->get();
         } elseif ($page === 'sell') {
-            $items = $user->items()->latest()->get();
-            $activeTab = 'sell';
+            $items = $user->items()
+                ->with('images')
+                ->latest()
+                ->get();
+        } elseif ($page === 'transactions') {
+            // 取引中（自分が seller or buyer）＋ 未読件数 + 新着順
+            $transactions = Transaction::with(['item.images', 'seller', 'buyer'])
+                ->where(function ($q) use ($user) {
+                    $q->where('seller_id', $user->id)
+                        ->orWhere('buyer_id', $user->id);
+                })
+                ->where('status', 'ongoing')
+                ->withCount([
+                    'messages as unread_count' => function ($q) use ($user) {
+                        $q->whereNull('read_at')
+                            ->where('user_id', '!=', $user->id);
+                    },
+                ])
+                ->orderByDesc('last_message_at')
+                ->get()
+                ->map(function ($transaction) use ($user) {
+                    // 相手ユーザーとサムネを便利プロパティとして付与
+                    $transaction->partner = $transaction->seller_id === $user->id
+                        ? $transaction->buyer
+                        : $transaction->seller;
+
+                    $transaction->thumb = optional($transaction->item->images->first())->file_path;
+
+                    return $transaction;
+                });
         } else {
-            $items = [];
-            $activeTab = 'profile';
+            // 想定外の値なら sell にフォールバック
+            $activeTab = 'sell';
+            $items = $user->items()
+                ->with('images')
+                ->latest()
+                ->get();
         }
-        return view('user.index', compact('user', 'items', 'activeTab'));
+
+        return view('user.index', compact('user', 'items', 'activeTab', 'transactions'));
     }
 
     // プロフィール編集フォーム
