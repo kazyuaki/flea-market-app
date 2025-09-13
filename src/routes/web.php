@@ -8,9 +8,9 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PurchaseController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Auth\Events\Verified;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\TransactionMessageController;
+use App\Http\Controllers\RatingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,4 +67,32 @@ Route::middleware('auth', 'verified', 'profile.set')->group(function () {
     Route::get('/purchase/complete/{item}', [PurchaseController::class, 'complete'])->name('purchase.complete');
     Route::get('/purchase/cancel/{item}', [PurchaseController::class, 'cancel'])->name('purchase.cancel');
     Route::post('/purchase/mock-complete/{item}', [PurchaseController::class, 'mockComplete']);
+
+    // 取引チャット画面（購入者/出品者共通）
+    Route::get('/transactions/{transaction}', [TransactionController::class, 'show'])
+        ->name('transactions.show');
+
+    // メッセージ投稿（US001/US002）
+    Route::post('/transactions/{transaction}/messages', [TransactionMessageController::class, 'store'])
+        ->name('transactions.messages.store');
+
+    // メッセージ編集/削除（US003）
+    Route::patch('/messages/{message}', [TransactionMessageController::class, 'update'])
+        ->name('messages.update');
+    Route::delete('/messages/{message}', [TransactionMessageController::class, 'destroy'])
+        ->name('messages.destroy');
+
+    // 既読処理（スレッド全体 / 個別）
+    Route::post('/transactions/{transaction}/read', [TransactionMessageController::class, 'markAllRead'])
+        ->name('transactions.read');
+    Route::post('/messages/{message}/read', [TransactionMessageController::class, 'markRead'])
+        ->name('messages.read');
+
+    // 取引完了（US004 → モーダルで評価へ）
+    Route::post('/transactions/{transaction}/complete', [TransactionController::class, 'complete'])
+        ->name('transactions.complete');
+
+    // 評価保存（US004）
+    Route::post('/transactions/{transaction}/ratings', [RatingController::class, 'store'])
+        ->name('transactions.ratings.store');
 });

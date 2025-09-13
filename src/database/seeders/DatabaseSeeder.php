@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use App\Models\Item;
+use App\Models\Transaction;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -20,7 +21,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CategoriesTableSeeder::class,
             ItemsTableSeeder::class,
-            ImagesTableSeeder::class
+            ImagesTableSeeder::class,
+            TransactionSeeder::class,
         ]);
     }
 }

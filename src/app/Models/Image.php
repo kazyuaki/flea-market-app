@@ -18,4 +18,9 @@ class Image extends Model
     {
         return $this->belongsTo(Item::class);
     }
+
+    public function images()
+    {
+        return $this->hasMany(Image::class);
+    }
 }
