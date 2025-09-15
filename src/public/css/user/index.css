@@ -1,26 +1,20 @@
 .mypage__content {
-    max-width: 1500px;
+    max-width: 1000px;
     margin: 40px auto;
     padding: 0 20px;
-}
-
-.mypage__profile {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 40px;
-    padding-bottom: 30px;
 }
 
 .user {
     display: flex;
     align-items: center;
-    margin-left:200px;
-    gap: 40px;
+    justify-content: space-between;
+    width: 100%;
 }
 
-.user h2 {
-    font-size: 30px;
+.user-info-wrap {
+    display: flex;
+    align-items: center;
+    gap: 24px;
 }
 
 .user__avatar {
@@ -30,26 +24,41 @@
     background-color: #ccc;
 }
 
-.profile__button {
-    margin-right: 300px;
+.user-info {
+    display: flex;
+    flex-direction: column;
 }
 
-.profile__button-submit{
+.user-info h2 {
+    font-size: 30px;
+    margin: 0 0 6px;
+}
+
+.user-rating {
+    display: flex;
+    gap: 6px;
+}
+
+.star-icon {
+    width: 30px;
+    height: 30px;
+}
+
+.profile__button-submit {
     border: 1px solid #ff5555;
-    background-color: white;
+    background-color: #fff;
     color: #ff5555;
     padding: 10px 20px;
     border-radius: 6px;
-    font-size: 20px;
-    font-weight: bold;
-    cursor: pointer;
+    font-size: 18px;
+    font-weight: 700;
     text-decoration: none;
 }
-
 
 .nav {
     display: block;
     border-bottom: 1px solid #ddd;
+    align-items: center;
 }
 
 .nav a {

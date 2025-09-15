@@ -24,14 +24,18 @@ class TransactionController extends Controller
             ->where('user_id', '!=', $user->id)
             ->update(['read_at' => Carbon::now()]);
 
-        $sidebar = \App\Models\Transaction::with(['item.images', 'seller', 'buyer'])
-            ->where(fn($q)=>$q->where('seller_id',$user->id)->orWhere('buyer_id', $user->id))
+        $sidebarTransactions = Transaction::with(['item.images', 'seller', 'buyer'])
+            ->where(fn($q) => $q->where('seller_id', $user->id)->orWhere('buyer_id', $user->id))
             ->where('status', 'ongoing')
-            ->withCount(['messages as unread_count' => fn($q) => $q->whereNull('read_at')->where('user_id', '!=', $user->id)])
+            ->withCount([
+                'messages as unread_count' => fn($q) => $q
+                    ->whereNull('read_at')
+                    ->where('user_id', '!=', $user->id),
+            ])
             ->orderByDesc('last_message_at')
             ->get();
 
-        return view('transactions.show', compact('transaction','partner','messages','sidebar'));
+        return view('transactions.show', compact('transaction','partner','messages','sidebarTransactions'));
     }
 
     public function store(StoreTransactionMessageRequest $request, Transaction $transaction)

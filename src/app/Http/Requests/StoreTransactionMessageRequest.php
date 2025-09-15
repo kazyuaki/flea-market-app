@@ -14,7 +14,12 @@ class StoreTransactionMessageRequest extends FormRequest
     public function authorize()
     {
         $transaction = $this->route('transaction');
-        return $this->user()?->can('message', $transaction) ?? false;
+        $user = $this->user();
+
+        if (!$user) {
+            return false;
+        }
+        return $user->can('message', $transaction);
     }
 
     /**

@@ -23,7 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'address',
         'building_name',
         'is_profile_set',
-        'email_verified_at', // 忘れずに！
+        'email_verified_at',
     ];
 
     protected $hidden = [
@@ -61,5 +61,19 @@ class User extends Authenticatable implements MustVerifyEmail
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function ratingsGiven()
+    {
+        return $this->hasMany(Rating::class, 'rater_id');
+    }
+    public function ratingsReceived()
+    {
+        return $this->hasMany(Rating::class, 'ratee_id');
+    }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
     }
 }
