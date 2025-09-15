@@ -75,14 +75,20 @@ Route::middleware('auth', 'verified', 'profile.set')->group(function () {
     // メッセージ投稿（US001/US002）
     Route::post('/transactions/{transaction}/messages', [TransactionMessageController::class, 'store'])
         ->name('transactions.messages.store');
+        
+    // メッセージ編集開始（編集フォームに切替）※セッションで edit_message_id を入れて show に戻す
+    Route::post('/transactions/{transaction}/messages/{message}/edit', [TransactionMessageController::class, 'edit'])
+        ->name('transactions.messages.edit');
 
-    // メッセージ編集/削除（US003）
-    Route::patch('/messages/{message}', [TransactionMessageController::class, 'update'])
-        ->name('messages.update');
-    Route::delete('/messages/{message}', [TransactionMessageController::class, 'destroy'])
-        ->name('messages.destroy');
+    // メッセージ更新（PATCH）
+    Route::patch('/transactions/{transaction}/messages/{message}', [TransactionMessageController::class, 'update'])
+        ->name('transactions.messages.update');
 
-    // 既読処理（スレッド全体 / 個別）
+    // メッセージ削除（DELETE）
+    Route::delete('/transactions/{transaction}/messages/{message}', [TransactionMessageController::class, 'destroy'])
+        ->name('transactions.messages.destroy');
+
+    // 既読処理（必要ならそのまま）
     Route::post('/transactions/{transaction}/read', [TransactionMessageController::class, 'markAllRead'])
         ->name('transactions.read');
     Route::post('/messages/{message}/read', [TransactionMessageController::class, 'markRead'])
