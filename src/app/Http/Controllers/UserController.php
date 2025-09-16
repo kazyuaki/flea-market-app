@@ -60,6 +60,21 @@ class UserController extends Controller
         $items        = collect();
         $transactions = collect();
 
+        // 取引ごとの未読件数を集計して合計に
+        $unreadTotal = Transaction::query()
+            ->where(function ($q) use ($user) {
+                $q->where('seller_id', $user->id)
+                    ->orWhere('buyer_id', $user->id);
+            })
+            ->withCount([
+                'messages as unread_count' => function ($q) use ($user) {
+                    $q->whereNull('read_at')
+                        ->where('user_id', '!=', $user->id);
+                }
+            ])
+            ->get()
+            ->sum('unread_count');
+
         if ($page === 'buy') {
             $items = $user->purchasedItems()
                 ->with('images')
@@ -76,7 +91,7 @@ class UserController extends Controller
                     $q->where('seller_id', $user->id)
                         ->orWhere('buyer_id', $user->id);
                 })
-                ->where('status', 'ongoing')
+                ->whereIn('status', ['ongoing', 'buyer_completed'])
                 ->withCount([
                     'messages as unread_count' => function ($q) use ($user) {
                         $q->whereNull('read_at')
@@ -104,7 +119,7 @@ class UserController extends Controller
                 ->get();
         }
 
-        return view('user.index', compact('user', 'items', 'activeTab', 'transactions', 'ratingAvg', 'ratingsCount'));
+        return view('user.index', compact('user', 'items', 'activeTab', 'transactions', 'ratingAvg', 'ratingsCount', 'unreadTotal'));
     }
 
     // プロフィール編集フォーム

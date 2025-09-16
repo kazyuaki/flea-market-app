@@ -18,11 +18,14 @@ class CreateTransactionsTable extends Migration
             $table->foreignId('item_id')->constrained()->cascadeOnDelete();
             $table->foreignId('seller_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('buyer_id')->constrained('users')->cascadeOnDelete();
-            $table->enum('status', ['ongoing', 'buyer_completed', 'completed'])->default('ongoing');
+            $table->string('status')->default('ongoing');
             $table->boolean('buyer_rated')->default(false);
             $table->boolean('seller_rated')->default(false);
             $table->timestamp('last_message_at')->nullable();
             $table->timestamps();
+
+            $table->index(['seller_id', 'status']);
+            $table->index(['buyer_id', 'status']);
         });
     }
 
