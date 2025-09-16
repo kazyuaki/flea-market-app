@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Transaction extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'item_id',
         'seller_id',
@@ -16,6 +17,9 @@ class Transaction extends Model
         'last_message_at'
     ];
 
+    protected $casts = [
+        'last_message_at' => 'datetime',
+    ];
 
     public function item()
     {

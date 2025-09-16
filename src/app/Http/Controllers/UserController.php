@@ -51,6 +51,8 @@ class UserController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
+        $ratingsCount = $user->ratingsReceived()->count();
+        $ratingAvg     = (int) round((float) $user->ratingsReceived()->avg('score') ?? 0);
 
         $page = $request->query('page', 'sell');
 
@@ -69,7 +71,6 @@ class UserController extends Controller
                 ->latest()
                 ->get();
         } elseif ($page === 'transactions') {
-            // 取引中（自分が seller or buyer）＋ 未読件数 + 新着順
             $transactions = Transaction::with(['item.images', 'seller', 'buyer'])
                 ->where(function ($q) use ($user) {
                     $q->where('seller_id', $user->id)
@@ -103,7 +104,7 @@ class UserController extends Controller
                 ->get();
         }
 
-        return view('user.index', compact('user', 'items', 'activeTab', 'transactions'));
+        return view('user.index', compact('user', 'items', 'activeTab', 'transactions', 'ratingAvg', 'ratingsCount'));
     }
 
     // プロフィール編集フォーム

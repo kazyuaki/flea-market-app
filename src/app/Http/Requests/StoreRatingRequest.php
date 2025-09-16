@@ -13,7 +13,9 @@ class StoreRatingRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->check();
+        $transaction = $this->route('transaction');
+        return $this->user() && $transaction &&
+            ($transaction->seller_id === $this->user()->id || $transaction->buyer_id === $this->user()->id);
     }
 
     /**
@@ -24,7 +26,7 @@ class StoreRatingRequest extends FormRequest
     public function rules()
     {
         return [
-            'score' => ['required', 'integer', 'min:1', 'max:5'],
+            'score'   => ['required', 'integer', 'between:1,5'],
         ];
     }
 
@@ -40,8 +42,8 @@ class StoreRatingRequest extends FormRequest
         return [
             'score.required' => '評価を選択してください。',
             'score.integer'  => '評価は数値で指定してください。',
-            'score.min'      => '評価は1以上を選択してください。',
-            'score.max'      => '評価は5以下を選択してください。',
+            'score.between'      => '評価は1以上5以下を選択してください。',
+
         ];
     }
 }

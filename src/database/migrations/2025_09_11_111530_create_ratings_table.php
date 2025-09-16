@@ -19,7 +19,6 @@ class CreateRatingsTable extends Migration
             $table->foreignId('rater_id')->constrained('users')->cascadeOnDelete(); 
             $table->foreignId('ratee_id')->constrained('users')->cascadeOnDelete(); 
             $table->unsignedTinyInteger('score'); 
-            $table->text('comment')->nullable();
             $table->timestamps();
 
             $table->unique(['transaction_id', 'rater_id', 'ratee_id']);

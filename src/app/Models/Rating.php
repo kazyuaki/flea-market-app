@@ -15,4 +15,17 @@ class Rating extends Model
         'ratee_id',
         'score',
     ];
+
+    public function transaction()
+    {
+        return $this->belongsTo(Transaction::class);
+    }
+    public function rater()
+    {
+        return $this->belongsTo(User::class, 'rater_id');
+    }
+    public function ratee()
+    {
+        return $this->belongsTo(User::class, 'ratee_id');
+    }
 }

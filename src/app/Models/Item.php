@@ -99,4 +99,20 @@ class Item extends Model
             ? $query->where('name', 'like', '%' . $keyword . '%')
             : $query;
     }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    /**
+     * この商品が「売り切れ（購入不可）か」を判定
+     * ongoing（取引中） or completed（売買完了）が存在すれば true
+     */
+    public function getIsSoldOutAttribute(): bool
+    {
+        return $this->transactions()
+            ->whereIn('status', ['ongoing', 'completed'])
+            ->exists();
+    }
 }

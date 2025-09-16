@@ -8,6 +8,9 @@ use App\Http\Requests\AddressRequest;
 use App\Http\Requests\PurchaseRequest;
 use Stripe\Stripe;
 use App\Services\StripeService;
+use Illuminate\Support\Facades\DB;
+use App\Models\Transaction;
+use Carbon\Carbon;
 
 
 class PurchaseController extends Controller
@@ -91,18 +94,39 @@ class PurchaseController extends Controller
                 ->withErrors('支払い方法が無効です');
         }
 
-        $user->orders()->create([
-            'item_id' => $item->id,
-            'payment_method' => $payment_method,
-            'shipping_post_code' => $user->post_code,
-            'shipping_address' => $user->address,
-            'shipping_building' => $user->building_name,
-        ]);
 
-        // セッション削除（任意）
-        $request->session()->forget('payment_method');
+        // すでに誰かが購入済みならガード（任意）
+        // if ($item->is_sold) { return back()->withErrors('この商品は既に購入されています'); }
 
-        return redirect()->route('items.index')->with('status', '購入が完了しました！');
+        $transaction = DB::transaction(function () use ($user, $item, $payment_method) {
+            $user->orders()->create([
+                'item_id' => $item->id,
+                'payment_method' => $payment_method,
+                'shipping_post_code' => $user->post_code,
+                'shipping_address' => $user->address,
+                'shipping_building' => $user->building_name,
+            ]);
+
+            $transaction = Transaction::firstOrCreate(
+                [
+                    'item_id'   => $item->id,
+                    'buyer_id'  => $user->id,
+                    'seller_id' => $item->user_id,
+                    'status'    => 'ongoing',
+                ],
+                [
+                    'last_message_at' => Carbon::now(), // 最初の基準時刻にしておく
+                ]
+            );
+            $item->update(['status' => 'sold']);
+
+            return $transaction;
+        });
+
+        // 取引チャットへ遷移
+        return redirect()
+            ->route('transactions.show', $transaction->id)
+            ->with('status', '購入が完了しました！取引メッセージでやり取りを開始できます。');
     }
 
     public function cancel(Request $request, Item $item)

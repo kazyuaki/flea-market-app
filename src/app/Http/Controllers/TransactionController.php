@@ -35,8 +35,41 @@ class TransactionController extends Controller
             ->orderByDesc('last_message_at')
             ->get();
 
-        return view('transactions.show', compact('transaction','partner','messages','sidebarTransactions'));
+        $autoOpenRatingModal = false;
+        if (
+            Auth::id() === $transaction->seller_id
+            && $transaction->status === 'buyer_completed'
+            && !$transaction->seller_rated
+        ) {
+            $autoOpenRatingModal = true;
+        }
+
+        return view('transactions.show', compact(
+            'transaction',
+            'partner',
+            'messages',
+            'sidebarTransactions',
+            'autoOpenRatingModal'
+        ));
     }
+
+    public function complete(Transaction $transaction)
+    {
+        $this->authorize('view', $transaction);
+
+        $user = Auth::user();
+        $isBuyer = $transaction->buyer_id === $user->id;
+
+        if ($isBuyer && $transaction->status === 'ongoing') {
+            $transaction->update(['status' => 'buyer_completed']);
+            // モーダルを開いた状態に戻す（ハッシュを使うのが手軽）
+            return redirect()->route('transactions.show', $transaction->id) . '#complete-modal';
+        }
+
+        // 出品者が押した場合はここでは何もしない（仕様上は自動表示のみ）
+        return redirect()->route('transactions.show', $transaction->id);
+    }
+
 
     public function store(StoreTransactionMessageRequest $request, Transaction $transaction)
     {
@@ -45,7 +78,7 @@ class TransactionController extends Controller
         $data = $request->validated();
 
         $imagePath = null;
-        if($request->hasFile('image')) {
+        if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('chat_images', 'public');
         }
 
@@ -57,5 +90,9 @@ class TransactionController extends Controller
         ]);
 
         $transaction->update(['last_message_at' => Carbon::now()]);
+
+        return redirect()
+            ->route('transactions.show', $transaction)
+            ->with('sent', true);
     }
 }

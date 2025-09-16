@@ -12,18 +12,17 @@
                 <img class="user__avatar" src="{{ asset('storage/' . $user->profile_image) }}" alt="ユーザー写真">
                 <div class="user-info">
                     <h2>{{ $user->name }}</h2>
-                    <div class="user-rating">
-                        @php
-                        $average = round($user->rating_avg ?? 0);
-                        @endphp
-                        @for($i = 1; $i <= 5; $i++)
-                            @if($i <=$average)
-                            <img src="{{ asset('img/Star yellow.png') }}" alt="star" class="star-icon">
-                            @else
-                            <img src="{{ asset('img/Star gray.png') }}" alt="star" class="star-icon">
-                            @endif
+
+                    @if ($ratingsCount > 0)
+                    <div class="user-rating" aria-label="平均評価 {{ number_format($user->rating_avg ?? 0, 1) }} / 5">
+                        @for ($i = 1; $i <= 5; $i++)
+                            <img
+                            src="{{ asset($i <= $ratingAvg ? 'img/Star yellow.png' : 'img/Star gray.png') }}"
+                            alt=""
+                            class="star-icon">
                             @endfor
                     </div>
+                    @endif
                 </div>
             </div>
             <div class="profile__button">
