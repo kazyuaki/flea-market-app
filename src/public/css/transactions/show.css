@@ -13,7 +13,6 @@
 ========================= */
 .transaction-side {
     background: #868686;
-    /* グレー背景 */
     color: #fff;
     padding: 16px 14px;
     border-right: 1px solid #ddd;
@@ -163,7 +162,6 @@
     padding: 8px 0;
 }
 
-/* 1メッセージ行（ユーザー情報 + コンテンツ） */
 .message-row {
     display: flex;
     align-items: flex-start;
@@ -175,7 +173,6 @@
     align-items: flex-end;
 }
 
-/* 左のユーザー情報 */
 .message-user {
     display: flex;
     flex-direction: column;
@@ -194,7 +191,6 @@
 
 .message-row.is-me .message-user {
     align-items: flex-end;
-    /* 名前を右寄せ */
 }
 
 .message-username {
@@ -204,7 +200,6 @@
     color: #374151;
 }
 
-/* 吹き出し＋アクションの縦並びコンテナ */
 .message-content {
     display: flex;
     flex-direction: column;
@@ -218,7 +213,6 @@
     align-items: flex-end;
 }
 
-/* 吹き出し（常に灰色） */
 .message-bubble {
     display: inline-block;
     box-sizing: border-box;
@@ -231,7 +225,6 @@
     font-size: 14px;
 }
 
-/* 画像 */
 .message-image {
     margin-top: 6px;
     max-width: 320px;
@@ -264,7 +257,6 @@
     text-decoration: underline;
 }
 
-/* 編集フォーム（インライン） */
 .message-edit {
     display: flex;
     gap: 8px;
@@ -387,7 +379,6 @@
     display: flex;
 }
 
-/* ダイアログ本体：ワイヤーに近い淡い黄色＋角丸＋枠線 */
 .modal__dialog {
     position: relative;
     width: 400px;
@@ -478,6 +469,50 @@
     transform: translateY(1px);
 }
 
+/* 1000px以下：サイドバーを240pxにして余裕を作る */
+@media (min-width: 768px) and (max-width: 1000px) {
+    .transaction-wrap {
+        grid-template-columns: 240px 1fr;
+    }
+}
+
+
+/* 767px以下（スマホ想定）：さらに詰めて使いやすく */
+@media (max-width: 767px) {
+    .transaction-wrap {
+        grid-template-columns: 1fr;
+    }
+
+    .transaction-main {
+        padding: 12px;
+    }
+
+    .transaction-head__heading {
+        font-size: 16px;
+    }
+
+    .transaction-product {
+        grid-template-columns: 80px 1fr;
+        gap: 10px;
+    }
+
+    .transaction-product__name {
+        font-size: 18px;
+    }
+
+    .transaction-product__price {
+        font-size: 16px;
+    }
+
+    .message-bubble {
+        max-width: 85vw;
+    }
+
+    /* 画面に収まるように */
+    .message-image {
+        max-width: 80vw;
+    }
+}
 
 /* モバイルでは2段 */
 @media (max-width: 720px) {

@@ -64,7 +64,7 @@
 .nav a {
     margin-left: 30px;
     color: #5f5f5f;
-    font-size: 20px; 
+    font-size: 20px;
     text-decoration: none;
 }
 
@@ -75,13 +75,14 @@
 }
 
 .item-list {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 30px;
 }
 
 .item {
-    width: calc(25% - 30px);
+    width: auto;
+    min-width: 0;
     text-align: center;
 }
 
@@ -96,12 +97,12 @@
     margin-top: 8px;
     font-size: 20px;
 }
+
 /* 一覧はグリッドで均等配置 */
 .transaction-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 16px;
-}
 
 /* カード＝正方形ボックス */
 .transaction-card {
@@ -116,6 +117,7 @@
     color: inherit;
     aspect-ratio: 1 / 1;
     /* ←ココがポイント */
+    position: relative;
 }
 
 .transaction-thumb-wrap {
@@ -175,10 +177,6 @@
     line-height: 1;
 }
 
-.transaction-card {
-    position: relative;
-}
-
 .badge {
     background-color: #ff5555;
     color: #fff;
@@ -186,4 +184,45 @@
     border-radius: 9999px;
     font-size: 15px;
     font-weight: bold;
+}
+
+/* --- レスポンシブ --- */
+/* 2) PC 1400–1540px：4列固定 */
+@media (min-width:1400px) and (max-width:1540px) {
+    .item-list {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .transaction-list {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+    
+    }
+}
+
+/* 3) タブレット 768–850px：3列固定 */
+@media (min-width:768px) and (max-width:850px) {
+    .item-list {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .item {
+        width: auto;
+    }
+
+   .transaction-list {
+       grid-template-columns: repeat(3, minmax(0, 1fr));
+   }
+}
+
+/* 4)（任意）スマホ〜767px：2列 or 1列にしたい場合はどちらか */
+@media (max-width:767px) {
+    .item-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .transaction-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+ }
 }
