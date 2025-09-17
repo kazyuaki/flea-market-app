@@ -235,22 +235,22 @@ https://docs.stripe.com/payments/checkout?locale=ja-JP
 ### テスト用データベースの作成
 1. MySQLコンテナに入る
 ```
-  docker-compose exec mysql bash  <br>
+  docker-compose exec mysql bash  
   mysql -u root -p
   # パスワードは root
 ```
 
 2. データベースと権限を作成する
 ```
-  CREATE DATABASE laravel_db_test;  <br>
-  GRANT ALL PRIVILEGES ON laravel_db_test.* TO 'laravel_user'@'%'; <br>
+  CREATE DATABASE laravel_db_test;  
+  GRANT ALL PRIVILEGES ON laravel_db_test.* TO 'laravel_user'@'%'; 
   FLUSH PRIVILEGES;
 ```
 
 3. マイグレーションとテスト実行
 ```
-  docker-compose exec php bash <br>
-  php artisan migrate:fresh --env=testing <br>
+  docker-compose exec php bash 
+  php artisan migrate:fresh --env=testing 
   ./vendor/bin/phpunit
 ```
 ※.env.testingにもStripeのAPIキーを設定してください。 
