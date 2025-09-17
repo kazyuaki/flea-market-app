@@ -14,6 +14,14 @@ class TransactionMessageController extends Controller
     // 送信
     public function store(StoreTransactionMessageRequest $request, Transaction $transaction)
     {
+        // 取引完了 or 片方が完了済みなら弾く
+        if ($transaction->status === 'completed' )
+         {
+            return back()->withErrors([
+                'body' => 'この取引は完了しているため、メッセージは送信できません。'
+            ]);
+        }
+        
         $this->authorize('message', $transaction);
 
         $data = $request->validated();

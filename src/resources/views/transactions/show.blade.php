@@ -38,7 +38,15 @@
     <section class="transaction-main">
         <header class="transaction-head">
             <div class="transaction-head__left">
-                <div class="transaction-head__avatar"></div>
+                @php
+                $avatar = optional($transaction->buyer)->profile_image
+                ? asset('storage/'.$transaction->buyer->profile_image)
+                : asset('img/noimage.png');
+                @endphp
+
+                <div class="transaction-head__avatar">
+                    <img src="{{ $avatar }}" alt="ユーザーのアバター" class="avatar-img">
+                </div>
                 <div class="transaction-head__titles">
                     <div class="transaction-head__heading">「{{ $partner->name }}」さんとの取引画面</div>
                     <div class="transaction-head-time">{{ optional($transaction->last_message_at)->diffForHumans() }}</div>
@@ -85,7 +93,7 @@
         <div class="transaction-product">
             @php $mainThumb = optional($transaction->item->images->first())->file_path; @endphp
             <img class="transaction-product__image"
-                src="{{ $mainThumb && Str::startsWith($mainThumb,'http') ? $mainThumb : ($mainThumb ? asset('storage/'.$mainThumb) : asset('storage/default.png')) }}"
+                src="{{ $mainThumb && Str::startsWith($mainThumb,'http') ? $mainThumb : ($mainThumb ? asset('storage/'.$mainThumb) : asset('img/noimage.png')) }}"
                 alt="">
             <div class="transaction-product__info">
                 <div class="transaction-product__name">{{ $transaction->item->name }}</div>
@@ -146,22 +154,25 @@
             {{ $messages->links() }}
         </div>
 
+        @if ($transaction->status !== 'ongoing')
+        <p>この取引を購入者が完了させました。メッセージを送信することはできません。</p>
+        @else
         <form id="transaction-form" class="transaction-form" method="post" enctype="multipart/form-data" action="{{ route('transactions.messages.store', $transaction->id) }}">
             @csrf
             <div class="transaction-form__row">
                 <input id="message-input"
-                class="transaction-form__input"
-                type="text"
-                name="body"
-                placeholder="取引メッセージを記入してください"
-                value="{{ old('body') }}">
-                
+                    class="transaction-form__input"
+                    type="text"
+                    name="body"
+                    placeholder="取引メッセージを記入してください"
+                    value="{{ old('body') }}">
+
                 <div class="transaction-form__controls">
                     <label class="transaction-form__upload">
                         画像を追加
                         <input type="file" name="image" hidden>
                     </label>
-                    
+
                     <button type="submit" class="transaction-form__send" title="送信" aria-label="送信">
                         <img src="{{ asset('img/input-button.png') }}" alt="" class="transaction-form__send-icon">
                     </button>
@@ -174,6 +185,7 @@
         @error('image')
         <p class="form-error">{{ $message }}</p>
         @enderror
+        @endif
     </section>
 </div>
 @endsection
@@ -185,6 +197,21 @@
         const root = document.getElementById('transaction-root');
         if (root && root.getAttribute('data-auto-open-rating') === '1') {
             if (location.hash !== '#complete-modal') location.hash = '#complete-modal';
+        }
+        // ====== メッセージ送信連打対策 ======
+        const form = document.getElementById('transaction-form');
+        const input = document.getElementById('message-input');
+        const sendBtn = form?.querySelector('.transaction-form__send');
+
+        if (form && sendBtn && input) {
+            form.addEventListener('submit', (e) => {
+                if (!input.value.trim()) {
+                    e.preventDefault(); // 空送信は防ぐ
+                    return;
+                }
+                sendBtn.disabled = true;
+                sendBtn.style.opacity = 0.6; // 連打防止の視覚効果
+            });
         }
     });
     // モーダル外クリックで閉じる
