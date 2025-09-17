@@ -3,76 +3,30 @@
 
 ## 環境構築
 
-#### Docker のビルド
-  1. リポジトリをクローン  
-    `
-    git clone git@github.com:kazyuaki/contact-form-test.git
-    `
+## 環境構築
 
-  2. コンテナをビルド&起動  
-    `
-    docker-compose up -d --build
-    `
+Docker ビルド  
+1.git clone git@github.com:kazyuaki/flea-market-app.git  
+2.docker-compose up -d --build
 
-  ※MySQL は、OS によって起動しない場合があるので、それぞれの PC に合わせて.  `docker-compose.yml` ファイルを編集してください
+Lavaral 環境構築  
+1.docker-compose exec php bash  
+2.composer install  
+3.cp .env.example .env  
+4..env ファイルの変更
 
-#### Laravel 環境構築
+```
+　DB_HOSTをmysqlに変更
+　DB_DATABASEをlaravel_dbに変更
+　DB_USERNAMEをlaravel_userに変更
+　DB_PASSをlaravel_passに変更
+　MAIL_FROM_ADDRESSに送信元アドレスを設定
+```
 
-1. コンテナに入る
-   
-    `docker-compose exec php bash`
-
-2. 依存パッケージをインストール
-   
-    `composer install`
-
-3. 環境変数ファイルをコピー
-   
-    `cp .env.example env` 
-
-4. アプリケーションキーを生成
-   
-    `php artisan key:generate`
-  
-5. マイグレーション
-   
-    `php artisan migrate`
-
-6. シーディング
-   
-    `php artisan db:seed`
-
-7. キャッシュクリア・再生成  
-   （環境変数や設定を変更した際は実行してください）
-
-    ```
-    php artisan config:clear
-    php artisan cache:clear
-    php artisan config:cache
-    ```
-
-#### サンプルアカウント
-シーディング後、以下のアカウントでログインできます。
-
-1. 管理者  
-   - email: admin@example.com  
-   - password: password  
-
-2. ユーザーA（出品者）  
-   - email: sellerA@example.com  
-   - password: password  <br>
-   ※ダミーデータ（商品1〜5の出品者）
-
-1. ユーザーB（出品者）  
-   - email: sellerB@example.com  
-   - password: password  <br>
-   ※ダミーデータ（商品6〜10の出品者）
-
-1. ユーザーC（閲覧専用）  
-   - email: viewer@example.com  
-   - password: password  <br>
-   ※出品商品なし
-
+5.php artisan key:generate  
+6.php artisan migrate  
+7.php artisan db:seed  
+8.php artisan test
 
 #### メール認証(Mailhog)
 
@@ -121,7 +75,7 @@ https://docs.stripe.com/payments/checkout?locale=ja-JP
 
 ## テーブル仕様
 
-### Usersテーブル
+### usersテーブル
 | カラム名      | 型           | primary key | unique key | not null | foreign key |
 | ------------- | ------------ | ----------- | ---------- | -------- | ----------- |
 | id            | bigint       | ◯           |            | ◯        |             |
@@ -132,13 +86,171 @@ https://docs.stripe.com/payments/checkout?locale=ja-JP
 | created_at    | timestamp    |             |            |          |             |
 | updated_at    | timestamp    |             |            |          |             |
 
+---
+
+### itemsテーブル
+| カラム名    | 型           | primary key | unique key | not null | foreign key    |
+| ----------- | ------------ | ----------- | ---------- | -------- | -------------- |
+| id          | bigint       | ◯           |            | ◯        |                |
+| user_id     | bigint       |             |            | ◯        | users(id)      |
+| category_id | bigint       |             |            | ◯        | categories(id) |
+| price       | int          |             |            | ◯        |                |
+| detail      | varchar(255) |             |            | ◯        |                |
+| img         | varchar(255) |             |            |          |                |
+| condition   | varchar(255) |             |            |          |                |
+| created_at  | timestamp    |             |            |          |                |
+| updated_at  | timestamp    |             |            |          |                |
+
+---
+
+### categoriesテーブル
+| カラム名   | 型           | primary key | unique key | not null | foreign key |
+| ---------- | ------------ | ----------- | ---------- | -------- | ----------- |
+| id         | bigint       | ◯           |            | ◯        |             |
+| content    | varchar(255) |             |            | ◯        |             |
+| created_at | timestamp    |             |            |          |             |
+| updated_at | timestamp    |             |            |          |             |
+
+---
+
+### category_itemテーブル
+| カラム名    | 型        | primary key | unique key                   | not null | foreign key    |
+| ----------- | --------- | ----------- | ---------------------------- | -------- | -------------- |
+| item_id     | bigint    |             | ◯(category_idとの組み合わせ) | ◯        | items(id)      |
+| category_id | bigint    |             | ◯(item_idとの組み合わせ)     | ◯        | categories(id) |
+| created_at  | timestamp |             |                              |          |                |
+| updated_at  | timestamp |             |                              |          |                |
+
+---
+
+### imagesテーブル
+| カラム名   | 型           | primary key | unique key | not null | foreign key |
+| ---------- | ------------ | ----------- | ---------- | -------- | ----------- |
+| id         | bigint       | ◯           |            | ◯        |             |
+| item_id    | bigint       |             |            | ◯        | items(id)   |
+| file_path  | varchar(255) |             |            | ◯        |             |
+| created_at | timestamp    |             |            |          |             |
+| updated_at | timestamp    |             |            |          |             |
+
+---
+
+### favoritesテーブル
+| カラム名   | 型        | primary key | unique key                   | not null | foreign key |
+| ---------- | --------- | ----------- | ---------------------------- | -------- | ----------- |
+| id         | bigint    | ◯           |                              | ◯        |             |
+| user_id    | bigint    |             |                              | ◯        | users(id)   |
+| item_id    | bigint    |             | ◯(user_idとの組み合わせ推奨) | ◯        | items(id)   |
+| created_at | timestamp |             |                              |          |             |
+| updated_at | timestamp |             |                              |          |             |
+
+---
+
+### commentsテーブル
+| カラム名   | 型           | primary key | unique key | not null | foreign key |
+| ---------- | ------------ | ----------- | ---------- | -------- | ----------- |
+| id         | bigint       | ◯           |            | ◯        |             |
+| user_id    | bigint       |             |            | ◯        | users(id)   |
+| item_id    | bigint       |             |            | ◯        | items(id)   |
+| content    | varchar(255) |             |            | ◯        |             |
+| created_at | timestamp    |             |            |          |             |
+| updated_at | timestamp    |             |            |          |             |
+
+---
+
+### ordersテーブル
+| カラム名               | 型           | primary key | unique key | not null | foreign key |
+| ---------------------- | ------------ | ----------- | ---------- | -------- | ----------- |
+| id                     | bigint       | ◯           |            | ◯        |             |
+| user_id                | bigint       |             |            | ◯        | users(id)   |
+| item_id                | bigint       |             | ◯          | ◯        | items(id)   |
+| payment_method         | varchar(50)  |             |            | ◯        |             |
+| shipping_post_code     | varchar(255) |             |            | ◯        |             |
+| shipping_address       | varchar(255) |             |            | ◯        |             |
+| shipping_building_name | varchar(255) |             |            |          |             |
+| created_at             | timestamp    |             |            |          |             |
+| updated_at             | timestamp    |             |            |          |             |
+
+---
+
+### transactionsテーブル
+| カラム名        | 型           | primary key | unique key | not null | foreign key |
+| --------------- | ------------ | ----------- | ---------- | -------- | ----------- |
+| id              | bigint       | ◯           |            | ◯        |             |
+| item_id         | bigint       |             |            | ◯        | items(id)   |
+| seller_id       | bigint       |             |            | ◯        | users(id)   |
+| buyer_id        | bigint       |             |            | ◯        | users(id)   |
+| status          | varchar(255) |             |            | ◯        |             |
+| buyer_rated     | tinyint(1)   |             |            | ◯        |             |
+| seller_rated    | tinyint(1)   |             |            | ◯        |             |
+| last_message_at | timestamp    |             |            |          |             |
+| created_at      | timestamp    |             |            |          |             |
+| updated_at      | timestamp    |             |            |          |             |
+
+---
+
+### transaction_messagesテーブル
+| カラム名       | 型           | primary key | unique key | not null | foreign key      |
+| -------------- | ------------ | ----------- | ---------- | -------- | ---------------- |
+| id             | bigint       | ◯           |            | ◯        |                  |
+| transaction_id | bigint       |             |            | ◯        | transactions(id) |
+| user_id        | bigint       |             |            | ◯        | users(id)        |
+| body           | text         |             |            |          |                  |
+| image_path     | varchar(255) |             |            |          |                  |
+| read_at        | timestamp    |             |            |          |                  |
+| created_at     | timestamp    |             |            |          |                  |
+| updated_at     | timestamp    |             |            |          |                  |
+
+---
+
+### ratingsテーブル
+| カラム名       | 型        | primary key | unique key | not null | foreign key      |
+| -------------- | --------- | ----------- | ---------- | -------- | ---------------- |
+| id             | bigint    | ◯           |            | ◯        |                  |
+| transaction_id | bigint    |             |            | ◯        | transactions(id) |
+| rater_id       | bigint    |             |            | ◯        | users(id)        |
+| ratee_id       | bigint    |             |            | ◯        | users(id)        |
+| score          | tinyint   |             |            | ◯        |                  |
+| created_at     | timestamp |             |            |          |                  |
+| updated_at     | timestamp |             |            |          |                  |
+
 
 ## ER 図
-![ER図](./Mock-caseER.drawio.png)
+![ER図](./ER.drawio.png)
+
+## ログイン情報
+シーディング後、以下のアカウントでログインできます。
+
+| 種別      | email               | password | 備考                              |
+| --------- | ------------------- | -------- | --------------------------------- |
+| 管理者    | admin@example.com   | password |                                   |
+| ユーザーA | sellerA@example.com | password | ダミーデータ（商品1〜5の出品者）  |
+| ユーザーB | sellerB@example.com | password | ダミーデータ（商品6〜10の出品者） |
+| ユーザーC | viewer@example.com  | password | 出品商品なし                      |
+
+
+
+## PHPUnitを利用したテストに関して
+以下のコマンド:  
+```
+//テスト用データベースの作成
+docker-compose exec mysql bash
+mysql -u root -p
+//パスワードはrootと入力
+create database test_database;
+
+docker-compose exec php bash
+php artisan migrate:fresh --env=testing
+./vendor/bin/phpunit
+```
+※.env.testingにもStripeのAPIキーを設定してください。 
+
+
 
 ## URL
 
 - 開発環境: http://localhost/
+- phpMyAdmin: http://localhost:8080/  
+
 - メール認証(Mailhog): http://localhost:8025
 - 決済(Stripe): https://stripe.com/jp
 
