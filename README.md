@@ -4,14 +4,14 @@
 ## 環境構築
 
 Docker ビルド  
-1.git clone git@github.com:kazyuaki/flea-market-app.git  
-2.docker-compose up -d --build
+1. `git clone git@github.com:kazyuaki/flea-market-app.git`  
+2. `docker-compose up -d --build`
 
 Lavaral 環境構築  
-1.docker-compose exec php bash  
-2.composer install  
-3.cp .env.example .env  
-4..env ファイルの変更
+1. `docker-compose exec php bash`
+2. `composer install`
+3. `cp .env.example .env`  
+4. `.env ファイルの変更`
 
 ```
 　DB_HOSTをmysqlに変更
@@ -19,13 +19,15 @@ Lavaral 環境構築
 　DB_USERNAMEをlaravel_userに変更
 　DB_PASSをlaravel_passに変更
 　MAIL_FROM_ADDRESSに送信元アドレスを設定
+  例） no-reply@example.com
 ```
 
-5.php artisan key:generate  
-6.php artisan migrate  
-7.php artisan db:seed 
-8.php artisan storage:link
-9.php artisan test
+5. `php artisan key:generate  `
+6. `php artisan migrate`  
+   　※ 数秒待ってから migrate してください
+7. `php artisan db:seed`  <br>
+8. `php artisan storage:link`
+9.  `php artisan test`
 
 #### メール認証(Mailhog)
 
