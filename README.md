@@ -63,7 +63,7 @@ https://docs.stripe.com/payments/checkout?locale=ja-JP
 
 ## 使用技術(実行環境)
 - 言語
-  - PHP 8.4.5
+  - PHP 8.2
   - JavaScript (ES6)
 
 - フレームワーク

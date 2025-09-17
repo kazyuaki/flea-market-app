@@ -24,8 +24,7 @@ services:
             MYSQL_USER: laravel_user
             MYSQL_PASSWORD: laravel_pass
             MYSQL_ALLOW_EMPTY_PASSWORD: 'no'
-        command:
-            mysqld --mysql-native-password=ON 
+            
         volumes:
             - ./docker/mysql/data:/var/lib/mysql
             - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
