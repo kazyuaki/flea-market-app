@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use App\Models\User;
 use App\Models\Item;
+use App\Models\Order;
 use App\Models\Transaction;
 use App\Models\TransactionMessage;
 
@@ -22,8 +23,21 @@ class TransactionSeeder extends Seeder
         $sellerB = User::where('email', 'sellerB@example.com')->firstOrFail();
         $viewer  = User::where('email', 'viewer@example.com')->firstOrFail();
 
-        $item1 = Item::where('name', '腕時計')->firstOrFail();   
+        $item1 = Item::where('name', '腕時計')->firstOrFail();
         $item6 = Item::where('name', 'マイク')->firstOrFail();
+
+        // ====== 取引1（腕時計） ======
+        // Orderを先に作成（buyerはsellerB）
+        Order::updateOrCreate(
+            ['item_id' => $item1->id],
+            [
+                'user_id'             => $sellerB->id,
+                'payment_method'      => 1,
+                'shipping_post_code'  => $sellerB->post_code ?? '000-0000',
+                'shipping_address'    => $sellerB->address ?? '東京都テスト区1-2-3',
+                'shipping_building'   => $sellerB->building_name,
+            ]
+        );
 
         $t1 = Transaction::updateOrCreate(
             [
@@ -34,6 +48,19 @@ class TransactionSeeder extends Seeder
                 'seller_id'       => $sellerA->id,
                 'status'          => 'ongoing',
                 'last_message_at' => now()->subMinutes(10)
+            ]
+        );
+
+        // ====== 取引2（マイク） ======
+        // Orderを先に作成（buyerはsellerA）
+        Order::updateOrCreate(
+            ['item_id' => $item6->id],
+            [
+                'user_id'             => $sellerA->id,
+                'payment_method'      => 1,
+                'shipping_post_code'  => $sellerA->post_code ?? '000-0000',
+                'shipping_address'    => $sellerA->address ?? '大阪府テスト市4-5-6',
+                'shipping_building'   => $sellerA->building_name,
             ]
         );
 
@@ -95,4 +122,3 @@ class TransactionSeeder extends Seeder
         }
     }
 }
-
