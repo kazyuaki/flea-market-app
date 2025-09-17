@@ -231,27 +231,26 @@ https://docs.stripe.com/payments/checkout?locale=ja-JP
 
 
 ## PHPUnitを利用したテストに関して
-以下のコマンド:  
-```
+ 
 ### テスト用データベースの作成
 1. MySQLコンテナに入る
 ```
-  docker-compose exec mysql bash
+  docker-compose exec mysql bash  <br>
   mysql -u root -p
   # パスワードは root
 ```
 
 2. データベースと権限を作成する
 ```
-  CREATE DATABASE laravel_db_test;
-  GRANT ALL PRIVILEGES ON laravel_db_test.* TO 'laravel_user'@'%';
+  CREATE DATABASE laravel_db_test;  <br>
+  GRANT ALL PRIVILEGES ON laravel_db_test.* TO 'laravel_user'@'%'; <br>
   FLUSH PRIVILEGES;
 ```
 
 3. マイグレーションとテスト実行
 ```
-  docker-compose exec php bash
-  php artisan migrate:fresh --env=testing
+  docker-compose exec php bash <br>
+  php artisan migrate:fresh --env=testing <br>
   ./vendor/bin/phpunit
 ```
 ※.env.testingにもStripeのAPIキーを設定してください。 
