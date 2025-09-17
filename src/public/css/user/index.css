@@ -96,39 +96,56 @@
     margin-top: 8px;
     font-size: 20px;
 }
-
+/* 一覧はグリッドで均等配置 */
 .transaction-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
 }
 
+/* カード＝正方形ボックス */
 .transaction-card {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    gap: 10px;
     padding: 12px;
     border: 1px solid #eee;
-    border-radius: 8px;
+    border-radius: 12px;
+    background: #fff;
     text-decoration: none;
     color: inherit;
-    background: #fff;
+    aspect-ratio: 1 / 1;
+    /* ←ココがポイント */
 }
 
-.transaction-thumb {
-    width: 60px;
-    height: 60px;
+.transaction-thumb-wrap {
+    width: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #f3f3f3;
+    flex: 0 0 auto;
+}
+
+.transaction-card img.transaction-thumb {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    border-radius: 6px;
-    margin-right: 12px;
+    display: block;
 }
 
+/* テキスト領域は残りを使う */
 .transaction-meta {
-    flex: 1;
+    flex: 1 1 auto;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 4px;
 }
 
 .transaction-item-name {
     font-weight: 600;
-    margin-bottom: 4px;
 }
 
 .transaction-partner {
@@ -142,82 +159,31 @@
 }
 
 .transaction-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: grid;
+    place-items: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 1px 1px;
     background: #ef4444;
     color: #fff;
-    border-radius: 50%;
-    padding: 4px 8px;
+    border-radius: 30px;
     font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
 }
 
-@media(max-width: 900px) {
-    .mypage__content {
-        max-width: 850px;
-   }
-   .user {
-       margin-left: 100px;
-       gap: 40px;
-   }
-   .user h2 {
-       font-size: 25px;
-   }
+.transaction-card {
+    position: relative;
+}
 
-   .profile__button {
-       margin-right: 150px;
-   }
-
-   .profile__button-submit {
-       font-size: 15px;
-   }
-
-   .transaction-list {
-       display: flex;
-       flex-direction: column;
-       gap: 12px;
-   }
-
-   .transaction-card {
-       display: flex;
-       align-items: center;
-       padding: 12px;
-       border: 1px solid #eee;
-       border-radius: 8px;
-       text-decoration: none;
-       color: inherit;
-       background: #fff;
-   }
-
-   .transaction-thumb {
-       width: 60px;
-       height: 60px;
-       object-fit: cover;
-       border-radius: 6px;
-       margin-right: 12px;
-   }
-
-   .transaction-meta {
-       flex: 1;
-   }
-
-   .transaction-item-name {
-       font-weight: 600;
-       margin-bottom: 4px;
-   }
-
-   .transaction-partner {
-       font-size: 13px;
-       color: #666;
-   }
-
-   .transaction-time {
-       font-size: 12px;
-       color: #999;
-   }
-
-   .transaction-badge {
-       background: #ef4444;
-       color: #fff;
-       border-radius: 50%;
-       padding: 4px 8px;
-       font-size: 12px;
-   }
-}   
+.badge {
+    background-color: #ff5555;
+    color: #fff;
+    padding: 4px 4px;
+    border-radius: 9999px;
+    font-size: 15px;
+    font-weight: bold;
+}

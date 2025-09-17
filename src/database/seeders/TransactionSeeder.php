@@ -28,7 +28,7 @@ class TransactionSeeder extends Seeder
         $t1 = Transaction::updateOrCreate(
             [
                 'item_id' => $item1->id,
-                'buyer_id' => $viewer->id,
+                'buyer_id' => $sellerB->id,
             ],
             [
                 'seller_id'       => $sellerA->id,
@@ -40,7 +40,7 @@ class TransactionSeeder extends Seeder
         $t2 = Transaction::updateOrCreate(
             [
                 'item_id' => $item6->id,
-             'buyer_id' => $viewer->id
+                'buyer_id' => $sellerA->id
             ],
             [
                 'seller_id'       => $sellerB->id,
@@ -53,12 +53,12 @@ class TransactionSeeder extends Seeder
         $this->seedMessages($t1, [
             // [user, body, 分前, 既読か]
             [$sellerA, 'はじめまして！よろしくお願いします。', 12, false],
-            [$viewer, '購入希望です。いつ発送可能でしょうか？', 11, true],
+            [$sellerB, '購入希望です。いつ発送可能でしょうか？', 11, true],
             [$sellerA, '明日には発送可能です！', 10, null], // 自分側の既読表示テスト用にnullでもOK
         ]);
 
         $this->seedMessages($t2, [
-            [$viewer, 'こちらのマイク購入希望です。', 45, false],
+            [$sellerA, 'こちらのマイク購入希望です。', 45, false],
             [$sellerB, 'ありがとうございます。動作問題ありません。', 40, true],
         ]);
     }

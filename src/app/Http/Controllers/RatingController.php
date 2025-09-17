@@ -12,41 +12,43 @@ class RatingController extends Controller
 {
     public function store(StoreRatingRequest $request, Transaction $transaction)
     {
+        $this->authorize('view', $transaction);
+
         $user = Auth::user();
+        $isBuyer = $user->id === $transaction->buyer_id;
+        $partnerId = $isBuyer ? $transaction->seller_id : $transaction->buyer_id;
 
-        // 当事者チェック
-        if ($transaction->seller_id !== $user->id && $transaction->buyer_id !== $user->id) {
-            abort(403);
+        // 1) 評価レコード保存（重複防止はユニーク制約 or 先に存在チェック）
+        Rating::updateOrCreate(
+            [
+                'transaction_id' => $transaction->id,
+                'rater_id'       => $user->id,
+            ],
+            [
+                'ratee_id'       => $partnerId,
+                'score'          => (int) $request->input('score'),
+            ]
+        );
+
+        // 2) どちらが評価したかのフラグ
+        if ($isBuyer) {
+            $transaction->buyer_rated = 1;
+            // 購入者側が進めた状態で、まだ出品者が評価していなければ buyer_completed のまま維持
+            if ($transaction->status === 'ongoing') {
+                $transaction->status = 'buyer_completed';
+            }
+        } else {
+            $transaction->seller_rated = 1;
         }
 
-        // 2重投稿を防止
-        $already = Rating::where('transaction_id', $transaction->id)
-            ->where('rater_id', $user->id)
-            ->exists();
-
-        if ($already) {
-            return redirect()
-                ->route('transactions.show', $transaction->id)
-                ->with('status', 'この取引の評価は送信済みです。');
+        // 3) 両者の評価が揃ったら completed に遷移
+        if ($transaction->buyer_rated && $transaction->seller_rated) {
+            $transaction->status = 'completed';
         }
 
-        // 相手を特定
-        $rateeId = $transaction->seller_id === $user->id
-            ? $transaction->buyer_id
-            : $transaction->seller_id;
+        $transaction->save();
 
-        // 保存
-        Rating::create([
-            'transaction_id' => $transaction->id,
-            'rater_id'       => $user->id,
-            'ratee_id'       => $rateeId,
-            'score'          => $request->input('score'),
-        ]);
-
-        // 商品一覧へリダイレクト（なければマイページ）
-        $redirectRoute = Route::has('items.index') ? 'items.index' : 'mypage';
-        return redirect()->route($redirectRoute)->with('status', '評価を送信しました。');
-    }
+        return redirect()->route('items.index')
+            ->with('status', '評価を送信しました');    }
 }
-
 

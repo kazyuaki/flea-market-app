@@ -31,7 +31,7 @@ class StoreTransactionMessageRequest extends FormRequest
     {
         return [
             'body' => ['required', 'string', 'max:400'],
-            'image' => ['nullable', 'image', 'mimes:jpeg,png', 'max:4096'], // 4MB
+            'image' => ['nullable', 'image', 'mimes:jpeg,png', 'max:4096'], 
         ];
     }
 

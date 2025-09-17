@@ -12,18 +12,17 @@
                 <img class="user__avatar" src="{{ asset('storage/' . $user->profile_image) }}" alt="ユーザー写真">
                 <div class="user-info">
                     <h2>{{ $user->name }}</h2>
-                    <div class="user-rating">
-                        @php
-                        $average = round($user->rating_avg ?? 0);
-                        @endphp
-                        @for($i = 1; $i <= 5; $i++)
-                            @if($i <=$average)
-                            <img src="{{ asset('img/Star yellow.png') }}" alt="star" class="star-icon">
-                            @else
-                            <img src="{{ asset('img/Star gray.png') }}" alt="star" class="star-icon">
-                            @endif
+
+                    @if ($ratingsCount > 0)
+                    <div class="user-rating" aria-label="平均評価 {{ number_format($user->rating_avg ?? 0, 1) }} / 5">
+                        @for ($i = 1; $i <= 5; $i++)
+                            <img
+                            src="{{ asset($i <= $ratingAvg ? 'img/Star yellow.png' : 'img/Star gray.png') }}"
+                            alt=""
+                            class="star-icon">
                             @endfor
                     </div>
+                    @endif
                 </div>
             </div>
             <div class="profile__button">
@@ -38,6 +37,9 @@
         <a href="/mypage?page=sell" class="{{ $activeTab === 'sell' ? 'active' : '' }}">出品した商品</a>
         <a href="/mypage?page=buy" class="{{ $activeTab === 'buy' ? 'active' : '' }}">購入した商品</a>
         <a href="/mypage?page=transactions" class="{{ $activeTab === 'transactions' ? 'active' : '' }}">取引中の商品</a>
+        @if(($unreadTotal ?? 0) > 0)
+        <span class="badge">{{ $unreadTotal }}</span>
+        @endif
     </nav>
 
     @if ($activeTab === 'transactions')
@@ -45,15 +47,17 @@
         @forelse($transactions as $transaction)
         <a href="{{ route('transactions.show', $transaction->id) }}" class="transaction-card">
             @php $thumb = $transaction->thumb; @endphp
-            @if ($thumb)
-            @if (Str::startsWith($thumb, 'http'))
-            <img class="transaction-thumb" src="{{ $thumb }}" alt="商品画像">
-            @else
-            <img class="transaction-thumb" src="{{ asset('storage/' . $thumb) }}" alt="商品画像">
-            @endif
-            @else
-            <img class="transaction-thumb" src="{{ asset('storage/default.png') }}" alt="商品画像">
-            @endif
+            <div class="transaction-thumb-wrap">
+                @if ($thumb)
+                @if (Str::startsWith($thumb, 'http'))
+                <img class="transaction-thumb" src="{{ $thumb }}" alt="商品画像">
+                @else
+                <img class="transaction-thumb" src="{{ asset('storage/'.$thumb) }}" alt="商品画像">
+                @endif
+                @else
+                <img class="transaction-thumb" src="{{ asset('storage/default.png') }}" alt="商品画像">
+                @endif
+            </div>
 
             <div class="transaction-meta">
                 <div class="transaction-item-name">{{ $transaction->item->name }}</div>

@@ -47,7 +47,6 @@ class User extends Authenticatable implements MustVerifyEmail
             ->withTimestamps();
     }
 
-    //「このユーザーがいいねした」商品一覧を取得するためのリレーション
     public function favorites()
     {
         return $this->belongsToMany(Item::class, 'favorites')->withTimestamps();
@@ -76,4 +75,5 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Rating::class);
     }
+
 }

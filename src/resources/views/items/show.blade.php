@@ -53,10 +53,18 @@
                 <form action="{{ route('purchase.confirm', ['item' => $item->id]) }}" method="POST">
                     @csrf
                     <div class="item-purchase__button">
-                        @if ($item->is_sold)
+                        @if (!$isLoggedIn)
+                        <a href="{{ route('login') }}" class="btn-primary">ログインして購入</a>
+
+                        @elseif ($isSold)
                         <button class="btn-sold" disabled>売り切れ</button>
-                        @elseif($item->user_id === auth()->id())
+
+                        @elseif ($isOwner)
                         <button class="btn-secondary" disabled>自分の商品です</button>
+
+                        @elseif ($myOngoingTransaction)
+                        <a href="{{ route('transactions.show', $myOngoingTransaction->id) }}" class="btn-primary">取引画面へ</a>
+
                         @else
                         <a href="{{ route('purchase.confirm', $item) }}" class="btn-primary">購入手続きへ</a>
                         @endif

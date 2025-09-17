@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ExhibitionRequest;
 use App\Models\Category;
 use App\Models\Item;
-
-
+use App\Models\Transaction;
+use Illuminate\Support\Facades\Auth;
 
 class ItemController extends Controller
 {
@@ -59,9 +59,26 @@ class ItemController extends Controller
     public function show(Item $item)
     {
 
-        //ルートで$item を受け取っている場合（暗黙の結合）
         $item->load(['categories', 'favorites', 'comments.user', 'images', 'order']);
-        return view('items.show', compact('item'));
+
+        $myOngoingTransaction = null;
+        if(Auth::check()) {
+            $userId = Auth::id();
+
+            $user = Auth::user();
+            $isLoggedIn = Auth::check();
+            $isOwner    = $isLoggedIn && $item->user_id === $user->id;
+            $isSold     = (bool)($item->is_sold ?? false);
+            $myOngoingTransaction = Transaction::where('item_id', $item->id)
+                ->where('status', 'ongoing')
+                ->where(function($q) use ($userId) {
+                    $q->where('buyer_id', $userId)
+                        ->orWhere('seller_id', $userId);
+                })
+                ->latest('last_message_at')
+                ->first();
+        }
+        return view('items.show', compact('item', 'isLoggedIn', 'isOwner', 'isSold', 'myOngoingTransaction'));
     }
 
     //商品出品画面の表示
