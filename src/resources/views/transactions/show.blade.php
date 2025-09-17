@@ -38,7 +38,15 @@
     <section class="transaction-main">
         <header class="transaction-head">
             <div class="transaction-head__left">
-                <div class="transaction-head__avatar"></div>
+                @php
+                $avatar = optional($transaction->buyer)->profile_image
+                ? asset('storage/'.$transaction->buyer->profile_image)
+                : asset('img/noimage.png');
+                @endphp
+
+                <div class="transaction-head__avatar">
+                    <img src="{{ $avatar }}" alt="ユーザーのアバター" class="avatar-img">
+                </div>
                 <div class="transaction-head__titles">
                     <div class="transaction-head__heading">「{{ $partner->name }}」さんとの取引画面</div>
                     <div class="transaction-head-time">{{ optional($transaction->last_message_at)->diffForHumans() }}</div>
@@ -85,7 +93,7 @@
         <div class="transaction-product">
             @php $mainThumb = optional($transaction->item->images->first())->file_path; @endphp
             <img class="transaction-product__image"
-                src="{{ $mainThumb && Str::startsWith($mainThumb,'http') ? $mainThumb : ($mainThumb ? asset('storage/'.$mainThumb) : asset('storage/default.png')) }}"
+                src="{{ $mainThumb && Str::startsWith($mainThumb,'http') ? $mainThumb : ($mainThumb ? asset('storage/'.$mainThumb) : asset('img/noimage.png')) }}"
                 alt="">
             <div class="transaction-product__info">
                 <div class="transaction-product__name">{{ $transaction->item->name }}</div>
@@ -147,7 +155,7 @@
         </div>
 
         @if ($transaction->status !== 'ongoing')
-        <p>この取引は完了しています。メッセージを送信することはできません。</p>
+        <p>この取引を購入者が完了させました。メッセージを送信することはできません。</p>
         @else
         <form id="transaction-form" class="transaction-form" method="post" enctype="multipart/form-data" action="{{ route('transactions.messages.store', $transaction->id) }}">
             @csrf
