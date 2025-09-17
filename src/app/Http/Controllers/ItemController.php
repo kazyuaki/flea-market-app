@@ -58,27 +58,36 @@ class ItemController extends Controller
     //商品詳細画面の表示
     public function show(Item $item)
     {
-
         $item->load(['categories', 'favorites', 'comments.user', 'images', 'order']);
 
+        $isLoggedIn = Auth::check();
+        $isOwner    = false;
+        $isSold     = $item->orders()->exists(); 
         $myOngoingTransaction = null;
-        if(Auth::check()) {
-            $userId = Auth::id();
 
-            $user = Auth::user();
-            $isLoggedIn = Auth::check();
-            $isOwner    = $isLoggedIn && $item->user_id === $user->id;
-            $isSold     = (bool)($item->is_sold ?? false);
+        if ($isLoggedIn) {
+            $user   = Auth::user();
+            $userId = $user->id;
+
+            $isOwner = $item->user_id === $userId;
+
             $myOngoingTransaction = Transaction::where('item_id', $item->id)
                 ->where('status', 'ongoing')
-                ->where(function($q) use ($userId) {
+                ->where(function ($q) use ($userId) {
                     $q->where('buyer_id', $userId)
                         ->orWhere('seller_id', $userId);
                 })
                 ->latest('last_message_at')
                 ->first();
         }
-        return view('items.show', compact('item', 'isLoggedIn', 'isOwner', 'isSold', 'myOngoingTransaction'));
+
+        return view('items.show', compact(
+            'item',
+            'isLoggedIn',
+            'isOwner',
+            'isSold',
+            'myOngoingTransaction'
+        ));
     }
 
     //商品出品画面の表示
