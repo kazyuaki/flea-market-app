@@ -9,6 +9,7 @@
     id="transaction-root"
     class="transaction-wrap"
     data-transaction-id="{{ $transaction->id }}"
+    data-user-id="{{ auth()->id() }}"
     data-auto-open-rating="{{ $autoOpenRatingModal ? '1' : '0' }}">
     <aside class="transaction-side">
         <div class="transaction-side__title">その他の取引</div>
@@ -148,32 +149,31 @@
         <form id="transaction-form" class="transaction-form" method="post" enctype="multipart/form-data" action="{{ route('transactions.messages.store', $transaction->id) }}">
             @csrf
             <div class="transaction-form__row">
-                @error('body')
-                <p class="form-error">{{ $message }}</p>
-                @enderror
                 <input id="message-input"
-                    class="transaction-form__input"
-                    type="text"
-                    name="body"
-                    placeholder="取引メッセージを記入してください"
-                    maxlength="400"
-                    value="{{ old('body') }}">
-
+                class="transaction-form__input"
+                type="text"
+                name="body"
+                placeholder="取引メッセージを記入してください"
+                value="{{ old('body') }}">
+                
                 <div class="transaction-form__controls">
-                    @error('image')
-                    <p class="form-error">{{ $message }}</p>
-                    @enderror
                     <label class="transaction-form__upload">
                         画像を追加
-                        <input type="file" name="image" accept="image/png,image/jpeg" hidden>
+                        <input type="file" name="image" hidden>
                     </label>
-
+                    
                     <button type="submit" class="transaction-form__send" title="送信" aria-label="送信">
                         <img src="{{ asset('img/input-button.png') }}" alt="" class="transaction-form__send-icon">
                     </button>
                 </div>
             </div>
         </form>
+        @error('body')
+        <p class="form-error">{{ $message }}</p>
+        @enderror
+        @error('image')
+        <p class="form-error">{{ $message }}</p>
+        @enderror
     </section>
 </div>
 @endsection
