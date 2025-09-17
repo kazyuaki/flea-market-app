@@ -47,7 +47,7 @@ class UserProfileTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->get(route('mypage', ['tab' => 'sell']));
+        $response = $this->get(route('mypage', ['page' => 'sell']));
 
         $response->assertOk();
         $response->assertSee('出品アイテム名');
@@ -73,7 +73,7 @@ class UserProfileTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->get(route('mypage', ['tab' => 'buy']));
+        $response = $this->get(route('mypage', ['page' => 'buy']));
 
         $response->assertOk();
         $response->assertSee('購入アイテム名');

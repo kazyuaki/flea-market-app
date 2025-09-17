@@ -28,7 +28,7 @@ class MylistTest extends TestCase
 
         $user->favorites()->attach($favoritedItem->id);
 
-        $response = $this->get('/?tab=mylist');
+        $response = $this->get('/?page=mylist');
         $response->assertSee('Favorited');
         $response->assertDontsee('Notfavorited');
     }
@@ -54,7 +54,7 @@ class MylistTest extends TestCase
             'shipping_building' => 'テストビル',
         ]);
 
-        $response = $this->get('/?tab=mylist');
+        $response = $this->get('/?page=mylist');
         $response->assertSee('SOLD');
     }
 
@@ -79,7 +79,7 @@ class MylistTest extends TestCase
         // お気に入り登録
         $user->favorites()->attach([$ownItem->id, $otherItem->id]);
 
-        $response = $this->get('/?tab=mylist');
+        $response = $this->get('/?page=mylist');
 
         // 他人の商品は表示
         $response->assertSee($otherItem->name);
@@ -94,7 +94,7 @@ class MylistTest extends TestCase
         $item = Item::factory()->create();
         $item->images()->create(['file_path' => 'test_image.png']);
 
-        $response = $this->get('/?tab=mylist');
+        $response = $this->get('/?page=mylist');
         $response->assertStatus(200);
         $response->assertSee('ログインしてください。');
     }
