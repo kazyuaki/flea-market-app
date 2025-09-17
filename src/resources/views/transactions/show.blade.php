@@ -39,13 +39,18 @@
         <header class="transaction-head">
             <div class="transaction-head__left">
                 @php
-                $avatar = optional($transaction->buyer)->profile_image
-                ? asset('storage/'.$transaction->buyer->profile_image)
+                $isSeller = auth()->id() === $transaction->seller_id;
+                $partner = $isSeller ? $transaction->buyer : $transaction->seller;
+                $partnerAvatar = $partner && $partner->profile_image
+                ? asset('storage/'.$partner->profile_image)
                 : asset('img/noimage.png');
                 @endphp
 
                 <div class="transaction-head__avatar">
-                    <img src="{{ $avatar }}" alt="ユーザーのアバター" class="avatar-img">
+                    <img src="{{ $partnerAvatar }}" alt="取引相手のアバター" class="avatar-img">
+                </div>
+                <div class="transaction-head__heading">
+                    {{ $partner->name }}
                 </div>
                 <div class="transaction-head__titles">
                     <div class="transaction-head__heading">「{{ $partner->name }}」さんとの取引画面</div>
@@ -155,7 +160,7 @@
         </div>
 
         @if ($transaction->status !== 'ongoing')
-        <p>この取引を購入者が完了させました。メッセージを送信することはできません。</p>
+        <p>購入者が取引を完了させたため、メッセージを送信することはできません。</p>
         @else
         <form id="transaction-form" class="transaction-form" method="post" enctype="multipart/form-data" action="{{ route('transactions.messages.store', $transaction->id) }}">
             @csrf
