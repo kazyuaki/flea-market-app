@@ -31,7 +31,7 @@ class StoreTransactionMessageRequest extends FormRequest
     {
         return [
             'body' => ['required', 'string', 'max:400'],
-            'image' => ['nullable', 'image', 'mimes:jpeg,png', 'max:4096'], 
+            'image' => ['nullable', 'mimes:jpeg,png', 'max:4096'], 
         ];
     }
 
@@ -48,7 +48,6 @@ class StoreTransactionMessageRequest extends FormRequest
         return [
             'body.required' => '本文を入力してください',
             'body.max'      => '本文は400文字以内で入力してください',
-            'image.image'   => '画像を選択してください',
             'image.mimes'   => '「.png」または「.jpeg」形式でアップロードしてください',
             'image.max'     => '画像サイズは4MB以内でアップロードしてください',
         ];

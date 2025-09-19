@@ -210,10 +210,6 @@
 
         if (form && sendBtn && input) {
             form.addEventListener('submit', (e) => {
-                if (!input.value.trim()) {
-                    e.preventDefault(); // 空送信は防ぐ
-                    return;
-                }
                 sendBtn.disabled = true;
                 sendBtn.style.opacity = 0.6; // 連打防止の視覚効果
             });
