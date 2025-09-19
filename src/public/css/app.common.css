@@ -12,10 +12,15 @@
     justify-content: space-between;
 }
 
+.header__inner,
+.nav-links {
+    min-width: 0;
+    /* flex子のはみ出し防止 */
+}
+
 .header__logo {
     font-weight: bold;
-    font-size: 50px;
-}
+    font-size: clamp(20px, 4vw, 50px);}
 .header {
     background-color: #000;
     color: #fff;
@@ -116,9 +121,10 @@
         justify-content: center;
         flex-wrap: wrap;
         gap: 15px;
-        position: absolute;
-        top: 25px;
-        left: 32%;
+        position: static;
+        left: auto;
+        top: auto;
+        overflow-x: clip;
         }
 
     .nav-links a,
@@ -131,4 +137,11 @@
         padding: 5px 10px;
         width: auto;
     } 
+
+    html,
+    body {
+        max-width: 850px;
+        overflow-x: hidden;
+        /* 強制的に横スクロール禁止 */
+    }
 }
